@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "wouter";
 import { Plus, Trash2, TrendingUp, TrendingDown, ChevronDown, ChevronUp } from "lucide-react";
 import SentimentTrendChart from "@/components/SentimentTrendChart";
 import { StockNews } from "@/components/StockNews";
@@ -470,7 +471,9 @@ export default function Watchlists() {
                             >
                               <div className="flex-1">
                                 <div className="flex items-center gap-3">
-                                  <h3 className="font-semibold text-lg">{stock.ticker}</h3>
+                                  <Link href={`/stock/${stock.ticker}`}>
+                                    <h3 className="font-semibold text-lg hover:text-primary hover:underline cursor-pointer">{stock.ticker}</h3>
+                                  </Link>
                                   {quote && (
                                     <>
                                       <span className="text-2xl font-bold">
