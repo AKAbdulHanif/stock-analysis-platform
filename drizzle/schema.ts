@@ -25,4 +25,83 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/**
+ * Watchlists - User-created collections of stocks to monitor
+ */
+export const watchlists = mysqlTable("watchlists", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 100 }).notNull(),
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Watchlist = typeof watchlists.$inferSelect;
+export type InsertWatchlist = typeof watchlists.$inferInsert;
+
+/**
+ * Watchlist Stocks - Stocks in a watchlist
+ */
+export const watchlistStocks = mysqlTable("watchlist_stocks", {
+  id: int("id").autoincrement().primaryKey(),
+  watchlistId: int("watchlistId").notNull(),
+  ticker: varchar("ticker", { length: 10 }).notNull(),
+  addedAt: timestamp("addedAt").defaultNow().notNull(),
+});
+
+export type WatchlistStock = typeof watchlistStocks.$inferSelect;
+export type InsertWatchlistStock = typeof watchlistStocks.$inferInsert;
+
+/**
+ * User Alerts - Price and sentiment change alerts
+ */
+export const userAlerts = mysqlTable("user_alerts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  ticker: varchar("ticker", { length: 10 }).notNull(),
+  alertType: mysqlEnum("alertType", ["price_above", "price_below", "sentiment_positive", "sentiment_negative", "sentiment_change"]).notNull(),
+  threshold: varchar("threshold", { length: 50 }), // For price alerts: "150.00", for sentiment: "0.05" (5% change)
+  isActive: int("isActive").default(1).notNull(), // 1 = active, 0 = inactive
+  lastTriggered: timestamp("lastTriggered"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserAlert = typeof userAlerts.$inferSelect;
+export type InsertUserAlert = typeof userAlerts.$inferInsert;
+
+/**
+ * Alert Notifications - Triggered alerts
+ */
+export const alertNotifications = mysqlTable("alert_notifications", {
+  id: int("id").autoincrement().primaryKey(),
+  alertId: int("alertId").notNull(),
+  userId: int("userId").notNull(),
+  ticker: varchar("ticker", { length: 10 }).notNull(),
+  message: text("message").notNull(),
+  isRead: int("isRead").default(0).notNull(), // 0 = unread, 1 = read
+  triggeredAt: timestamp("triggeredAt").defaultNow().notNull(),
+});
+
+export type AlertNotification = typeof alertNotifications.$inferSelect;
+export type InsertAlertNotification = typeof alertNotifications.$inferInsert;
+
+/**
+ * Sentiment History - Daily sentiment snapshots for trend analysis
+ */
+export const sentimentHistory = mysqlTable("sentiment_history", {
+  id: int("id").autoincrement().primaryKey(),
+  ticker: varchar("ticker", { length: 10 }).notNull(),
+  date: timestamp("date").notNull(),
+  sentimentScore: varchar("sentimentScore", { length: 20 }).notNull(), // Store as string to preserve precision
+  sentimentType: mysqlEnum("sentimentType", ["positive", "negative", "neutral"]).notNull(),
+  confidence: varchar("confidence", { length: 20 }).notNull(),
+  articleCount: int("articleCount").notNull(),
+  avgScore7d: varchar("avgScore7d", { length: 20 }), // 7-day moving average
+  avgScore30d: varchar("avgScore30d", { length: 20 }), // 30-day moving average
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SentimentHistory = typeof sentimentHistory.$inferSelect;
+export type InsertSentimentHistory = typeof sentimentHistory.$inferInsert;

@@ -10,6 +10,9 @@ import { serveStatic, setupVite } from "./vite";
 import stockApiRouter from "../routes/stockApi";
 import newsApiRouter from "../routes/newsApi";
 import sentimentPortfolioApiRouter from "../routes/sentimentPortfolioApi";
+import watchlistApiRouter from "../routes/watchlistApi";
+import alertApiRouter from "../routes/alertApi";
+import sentimentHistoryApiRouter from "../routes/sentimentHistoryApi";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -44,6 +47,12 @@ async function startServer() {
   app.use("/api", newsApiRouter);
   // Sentiment Portfolio API routes
   app.use("/api/sentiment", sentimentPortfolioApiRouter);
+  // Watchlist API routes
+  app.use("/api", watchlistApiRouter);
+  // Alert API routes
+  app.use("/api/alerts", alertApiRouter);
+  // Sentiment History API routes
+  app.use("/api/sentiment-history", sentimentHistoryApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",

@@ -8,6 +8,13 @@
       "when": 1766747587184,
       "tag": "0000_first_tenebrous",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1766788601462,
+      "tag": "0001_parallel_lady_bullseye",
+      "breakpoints": true
     }
   ]
 }

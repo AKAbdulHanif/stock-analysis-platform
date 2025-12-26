@@ -158,3 +158,36 @@
 - [x] Create testing summary documentation (TESTING_SUMMARY.md)
 - [x] Create deployment documentation (DEPLOYMENT_MANUS.md, DEPLOYMENT_AWS.md)
 - [ ] Create final checkpoint with all tests and deployment config
+
+## Production Deployment & New Features
+
+### Production Deployment
+- [ ] Deploy to production via Manus Publish button
+- [ ] Verify live site functionality
+- [ ] Test all API endpoints in production
+- [ ] Monitor analytics and performance
+
+### User Watchlists Feature
+- [ ] Design watchlist database schema (user_watchlists, watchlist_stocks)
+- [ ] Create backend API for watchlist CRUD operations
+- [ ] Implement add/remove stocks to watchlist
+- [ ] Build watchlist UI component
+- [ ] Add watchlist page/section to navigation
+- [ ] Test watchlist functionality
+
+### Price & Sentiment Alerts
+- [ ] Design alerts database schema (user_alerts, alert_triggers)
+- [ ] Create alert conditions (price above/below, sentiment change)
+- [ ] Implement alert checking service (background job)
+- [ ] Build alert configuration UI
+- [ ] Add notification system (in-app notifications)
+- [ ] Test alert triggering and notifications
+
+### Historical Sentiment Charts
+- [ ] Design sentiment history database schema (sentiment_history)
+- [ ] Create background job to store daily sentiment snapshots
+- [ ] Build API endpoint for historical sentiment data
+- [ ] Implement time-series chart component (30/60/90 day views)
+- [ ] Add sentiment trend indicators (improving/declining)
+- [ ] Integrate charts into stock detail pages
+- [ ] Test historical data collection and visualization

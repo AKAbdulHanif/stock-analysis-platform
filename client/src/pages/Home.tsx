@@ -2,7 +2,8 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight, Star } from "lucide-react";
+import { Link } from "wouter";
 import { useState } from "react";
 import StockComparison from "@/components/StockComparison";
 import PriceUpdateIndicator from "@/components/PriceUpdateIndicator";
@@ -74,9 +75,17 @@ export default function Home() {
               <h1 className="text-3xl font-bold text-white mb-1">Investment Outlook 2026</h1>
               <p className="text-slate-400">Deep Research & Stock Recommendations</p>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-slate-500">December 26, 2025</p>
-              <p className="text-sm text-slate-500">By Manus AI</p>
+            <div className="flex items-center gap-4">
+              <Link href="/watchlists">
+                <Button variant="outline" className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
+                  <Star className="mr-2 h-4 w-4" />
+                  My Watchlists
+                </Button>
+              </Link>
+              <div className="text-right">
+                <p className="text-sm text-slate-500">December 26, 2025</p>
+                <p className="text-sm text-slate-500">By Manus AI</p>
+              </div>
             </div>
           </div>
         </div>
