@@ -17,6 +17,7 @@ import {
   type TradeEntry
 } from "@/lib/performanceTracking";
 import StrategyComparisonReport from "./StrategyComparisonReport";
+import CorrelationAnalysis from "./CorrelationAnalysis";
 
 export default function PerformanceDashboard() {
   const [templatePerformance, setTemplatePerformance] = useState<TemplatePerformance[]>([]);
@@ -287,6 +288,9 @@ export default function PerformanceDashboard() {
 
               {/* Strategy Comparison Reports */}
               <StrategyComparisonReport />
+
+              {/* Correlation Analysis */}
+              <CorrelationAnalysis />
 
               {/* Data Management */}
               <div className="flex gap-2">
