@@ -219,3 +219,34 @@
 - [x] Verify API integration
 - [ ] Create final checkpoint
 - [ ] Deploy to production via Publish button
+
+## Sentiment History Collection & Portfolio Performance
+
+### Background Sentiment Collection
+- [x] Create sentiment snapshot collection service
+- [x] Build API endpoint for manual sentiment collection
+- [x] Collect sentiment for stocks using news API
+- [x] Store daily snapshots in sentiment_history table
+- [x] Add error handling and retry logic
+- [x] Create manual trigger endpoint (/api/sentiment-snapshots/collect/:ticker)
+- [x] Fix database schema compatibility issues
+- [x] Test sentiment collection with AAPL (successful)
+
+### Portfolio Performance Tracking
+- [ ] Design portfolio performance database schema
+- [ ] Create portfolio snapshot table (daily holdings values)
+- [ ] Build performance calculation service (returns, volatility, Sharpe ratio)
+- [ ] Create API endpoints for performance data
+- [ ] Build performance dashboard UI
+- [ ] Add historical return charts (1M, 3M, 6M, 1Y)
+- [ ] Display risk metrics (volatility, max drawdown, beta)
+- [ ] Add benchmark comparison (S&P 500)
+- [ ] Test performance calculations
+
+### Testing & Deployment
+- [x] Test sentiment collection job (AAPL successful)
+- [x] Test sentiment history API endpoint
+- [x] Verify sentiment chart displays correctly with real data
+- [x] Fix string-to-number parsing in frontend
+- [ ] Create final checkpoint
+- [ ] Deploy to production

@@ -1,0 +1,22 @@
+{
+  "query": "SELECT * FROM sentiment_history WHERE ticker = 'AAPL' ORDER BY date DESC LIMIT 1",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3ZZKifmjJVTWLiH.6c76085ec4ce --database g5oK4DbHbBXHsa54ccVWRE --execute SELECT * FROM sentiment_history WHERE ticker = 'AAPL' ORDER BY date DESC LIMIT 1",
+  "rows": [
+    {
+      "id": "1",
+      "ticker": "AAPL",
+      "date": "2025-12-26 23:08:45",
+      "sentimentScore": "0.18",
+      "sentimentType": "positive",
+      "confidence": "0.018",
+      "articleCount": "10",
+      "avgScore7d": "NULL",
+      "avgScore30d": "NULL",
+      "createdAt": "2025-12-26 23:08:44"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tticker\tdate\tsentimentScore\tsentimentType\tconfidence\tarticleCount\tavgScore7d\tavgScore30d\tcreatedAt\n1\tAAPL\t2025-12-26 23:08:45\t0.18\tpositive\t0.018\t10\tNULL\tNULL\t2025-12-26 23:08:44\n",
+  "stderr": "",
+  "execution_time_ms": 88
+}

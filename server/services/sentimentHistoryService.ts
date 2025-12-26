@@ -70,10 +70,10 @@ export async function getSentimentHistory(
       .where(
         and(
           eq(sentimentHistory.ticker, ticker.toUpperCase()),
-          gte(sentimentHistory.recordedAt, cutoffDate)
+          gte(sentimentHistory.date, cutoffDate)
         )
       )
-      .orderBy(desc(sentimentHistory.recordedAt));
+      .orderBy(desc(sentimentHistory.date));
 
     return history;
   } catch (error) {

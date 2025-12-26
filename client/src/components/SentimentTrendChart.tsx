@@ -42,7 +42,14 @@ export default function SentimentTrendChart({ ticker }: SentimentTrendChartProps
       }
 
       const history = await response.json();
-      setData(history);
+      // Parse string values to numbers
+      const parsedHistory = history.map((h: any) => ({
+        ...h,
+        sentimentScore: parseFloat(h.sentimentScore),
+        confidence: parseFloat(h.confidence),
+        recordedAt: h.date || h.recordedAt, // Use 'date' field from schema
+      }));
+      setData(parsedHistory);
 
       // Calculate trend
       if (history.length > 0) {
