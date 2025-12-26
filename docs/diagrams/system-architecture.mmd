@@ -1,0 +1,48 @@
+graph TB
+    subgraph "Client Layer"
+        UI[React UI Components]
+        State[React Query State]
+        Router[Wouter Router]
+        Context[React Contexts]
+    end
+
+    subgraph "Application Layer"
+        Express[Express Server]
+        TRPC[tRPC Router]
+        Auth[OAuth Handler]
+        BL[Business Logic]
+    end
+
+    subgraph "Data Layer"
+        DB[(MySQL/TiDB<br/>Database)]
+        Cache[In-Memory Cache]
+        S3[S3 Storage]
+    end
+
+    subgraph "External Services"
+        Yahoo[Yahoo Finance API]
+        LLM[LLM Services]
+        OAuth[Manus OAuth]
+    end
+
+    UI --> State
+    State --> TRPC
+    Router --> UI
+    Context --> UI
+    
+    TRPC --> Express
+    Express --> Auth
+    Express --> BL
+    
+    BL --> DB
+    BL --> Cache
+    BL --> S3
+    BL --> Yahoo
+    BL --> LLM
+    
+    Auth --> OAuth
+
+    style UI fill:#4A90E2
+    style TRPC fill:#50C878
+    style DB fill:#FF6B6B
+    style Yahoo fill:#FFA500

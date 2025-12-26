@@ -1,0 +1,41 @@
+sequenceDiagram
+    participant User
+    participant Client
+    participant tRPC
+    participant Server
+    participant DB
+    participant API
+
+    Note over User,API: Stock Data Retrieval Flow
+    
+    User->>Client: Request stock data
+    Client->>tRPC: Query (stock.getQuote)
+    tRPC->>Server: Procedure call
+    Server->>API: Fetch from Yahoo Finance
+    API-->>Server: Stock data
+    Server->>DB: Cache result
+    Server-->>tRPC: Return data
+    tRPC-->>Client: Update state
+    Client-->>User: Display stock info
+
+    Note over User,API: Trade Entry Flow
+    
+    User->>Client: Submit trade form
+    Client->>tRPC: Mutation (trade.create)
+    tRPC->>Server: Validate & process
+    Server->>DB: Insert trade record
+    Server->>DB: Update portfolio
+    Server-->>tRPC: Success response
+    tRPC-->>Client: Optimistic update
+    Client-->>User: Show confirmation
+
+    Note over User,API: Price Alert Flow
+    
+    Server->>Server: Timer trigger
+    Server->>API: Fetch current prices
+    API-->>Server: Price data
+    Server->>DB: Check alert conditions
+    Server->>Server: Evaluate triggers
+    Server->>User: Send notification
+    Server->>Client: Push update
+    Client-->>User: Display alert
