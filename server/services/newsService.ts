@@ -5,6 +5,8 @@
  * Provides caching and error handling for news data
  */
 
+import { analyzeArticleSentiment } from './sentimentService';
+
 interface NewsArticle {
   title: string;
   summary: string;
@@ -13,6 +15,11 @@ interface NewsArticle {
   publishedAt: string;
   thumbnail?: string;
   ticker: string;
+  sentiment?: {
+    type: 'positive' | 'negative' | 'neutral';
+    score: number;
+    confidence: number;
+  };
 }
 
 interface NewsCache {
@@ -70,16 +77,29 @@ export async function getStockNews(ticker: string, limit: number = 10): Promise<
 
     const data = await response.json();
     
-    // Parse news articles
-    const articles: NewsArticle[] = (data.news || []).map((item: any) => ({
-      title: item.title || 'Untitled',
-      summary: item.summary || item.description || '',
-      url: item.link || item.url || '#',
-      source: item.publisher || item.providerName || 'Unknown',
-      publishedAt: new Date(item.providerPublishTime * 1000).toISOString(),
-      thumbnail: item.thumbnail?.resolutions?.[0]?.url || item.thumbnail?.url,
-      ticker: ticker
-    }));
+    // Parse news articles with sentiment analysis
+    const articles: NewsArticle[] = (data.news || []).map((item: any) => {
+      const title = item.title || 'Untitled';
+      const summary = item.summary || item.description || '';
+      
+      // Analyze sentiment
+      const sentimentResult = analyzeArticleSentiment(title, summary);
+      
+      return {
+        title,
+        summary,
+        url: item.link || item.url || '#',
+        source: item.publisher || item.providerName || 'Unknown',
+        publishedAt: new Date(item.providerPublishTime * 1000).toISOString(),
+        thumbnail: item.thumbnail?.resolutions?.[0]?.url || item.thumbnail?.url,
+        ticker: ticker,
+        sentiment: {
+          type: sentimentResult.sentiment,
+          score: sentimentResult.score,
+          confidence: sentimentResult.confidence
+        }
+      };
+    });
 
     // Cache the results
     newsCache.set(cacheKey, {

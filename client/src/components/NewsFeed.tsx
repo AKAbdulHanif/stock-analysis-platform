@@ -19,6 +19,11 @@ interface NewsArticle {
   publishedAt: string;
   thumbnail?: string;
   ticker: string;
+  sentiment?: {
+    type: 'positive' | 'negative' | 'neutral';
+    score: number;
+    confidence: number;
+  };
 }
 
 interface NewsFeedProps {
@@ -32,6 +37,7 @@ export default function NewsFeed({ tickers, limit = 20, showFilter = true }: New
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedTicker, setSelectedTicker] = useState<string>("all");
+  const [selectedSentiment, setSelectedSentiment] = useState<string>("all");
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchNews = async () => {
@@ -80,9 +86,14 @@ export default function NewsFeed({ tickers, limit = 20, showFilter = true }: New
     fetchNews();
   };
 
-  const filteredNews = selectedTicker === "all" 
+  let filteredNews = selectedTicker === "all" 
     ? news 
     : news.filter(article => article.ticker === selectedTicker);
+  
+  // Filter by sentiment
+  if (selectedSentiment !== "all") {
+    filteredNews = filteredNews.filter(article => article.sentiment?.type === selectedSentiment);
+  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -145,21 +156,39 @@ export default function NewsFeed({ tickers, limit = 20, showFilter = true }: New
         </div>
 
         <div className="flex items-center gap-3">
-          {showFilter && tickers && tickers.length > 1 && (
-            <Select value={selectedTicker} onValueChange={setSelectedTicker}>
-              <SelectTrigger className="w-[140px] bg-slate-800 border-slate-700 text-white">
-                <Filter size={16} className="mr-2" />
-                <SelectValue placeholder="All Stocks" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Stocks</SelectItem>
-                {tickers.map(ticker => (
-                  <SelectItem key={ticker} value={ticker}>
-                    {ticker}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          {showFilter && (
+            <>
+              {/* Sentiment Filter */}
+              <Select value={selectedSentiment} onValueChange={setSelectedSentiment}>
+                <SelectTrigger className="w-[140px] bg-slate-800 border-slate-700 text-white">
+                  <SelectValue placeholder="All Sentiment" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Sentiment</SelectItem>
+                  <SelectItem value="positive">Positive</SelectItem>
+                  <SelectItem value="neutral">Neutral</SelectItem>
+                  <SelectItem value="negative">Negative</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Ticker Filter */}
+              {tickers && tickers.length > 1 && (
+                <Select value={selectedTicker} onValueChange={setSelectedTicker}>
+                  <SelectTrigger className="w-[140px] bg-slate-800 border-slate-700 text-white">
+                    <Filter size={16} className="mr-2" />
+                    <SelectValue placeholder="All Stocks" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Stocks</SelectItem>
+                    {tickers.map(ticker => (
+                      <SelectItem key={ticker} value={ticker}>
+                        {ticker}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </>
           )}
 
           <Button
@@ -201,9 +230,25 @@ export default function NewsFeed({ tickers, limit = 20, showFilter = true }: New
                       {article.title}
                     </a>
                   </h4>
-                  <Badge className="flex-shrink-0 bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
-                    {article.ticker}
-                  </Badge>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {/* Sentiment Badge */}
+                    {article.sentiment && (
+                      <Badge className={
+                        article.sentiment.type === 'positive'
+                          ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+                          : article.sentiment.type === 'negative'
+                          ? "bg-red-500/20 text-red-400 border-red-500/30"
+                          : "bg-slate-500/20 text-slate-400 border-slate-500/30"
+                      }>
+                        {article.sentiment.type === 'positive' ? '📈' : article.sentiment.type === 'negative' ? '📉' : '➖'}
+                        {article.sentiment.type}
+                      </Badge>
+                    )}
+                    {/* Ticker Badge */}
+                    <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                      {article.ticker}
+                    </Badge>
+                  </div>
                 </div>
 
                 <p className="text-slate-400 text-sm line-clamp-2 mb-3">

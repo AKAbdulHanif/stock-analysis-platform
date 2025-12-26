@@ -50,4 +50,23 @@
 - [x] Add news feed to Portfolio Dashboard
 - [ ] Add news feed to individual stock cards
 - [x] Test news feed with portfolio stocks
-- [ ] Save checkpoint with news feed feature
+- [x] Save checkpoint with news feed feature
+
+## Sentiment Analysis Implementation (In Progress)
+
+### Backend Sentiment Service
+- [x] Create sentiment analysis service using keyword-based NLP
+- [x] Define positive/negative/neutral keywords for financial news
+- [x] Implement sentiment scoring algorithm
+- [x] Add sentiment field to NewsArticle interface
+- [x] Integrate sentiment analysis into news fetching
+
+### Frontend Sentiment Display
+- [x] Add sentiment badges to news article cards
+- [x] Add sentiment filtering in NewsFeed component
+- [ ] Create sentiment distribution chart
+- [x] Add color coding for sentiment (green=positive, red=negative, gray=neutral)
+
+### Testing & Deployment
+- [x] Test sentiment analysis accuracy
+- [ ] Save checkpoint with sentiment analysis feature
