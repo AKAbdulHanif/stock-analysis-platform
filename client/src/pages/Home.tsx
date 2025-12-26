@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useState } from "react";
 import StockComparison from "@/components/StockComparison";
+import PriceUpdateIndicator from "@/components/PriceUpdateIndicator";
 import PerformanceDashboard from "@/components/PerformanceDashboard";
 
 export default function Home() {
@@ -54,8 +55,9 @@ export default function Home() {
     }
   ];
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+   return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+      <PriceUpdateIndicator />
       {/* Header */}
       <header className="border-b border-slate-700/50 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container py-6">

@@ -5,9 +5,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, TrendingUp } from "lucide-react";
+import { Plus, TrendingUp, RefreshCw } from "lucide-react";
 import { recordTradeEntry, closeTradeEntry, type TradeEntry } from "@/lib/performanceTracking";
 import { ALERT_TEMPLATES } from "@/lib/alertTemplates";
+import { useStockPrice } from "@/contexts/PriceContext";
 
 interface TradeEntryFormProps {
   stockTicker: string;
@@ -15,7 +16,7 @@ interface TradeEntryFormProps {
   onTradeRecorded?: (trade: TradeEntry) => void;
 }
 
-export default function TradeEntryForm({ stockTicker, currentPrice, onTradeRecorded }: TradeEntryFormProps) {
+export default function TradeEntryForm({ stockTicker, currentPrice: initialPrice, onTradeRecorded }: TradeEntryFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [entryPrice, setEntryPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<string>("1");
@@ -24,6 +25,8 @@ export default function TradeEntryForm({ stockTicker, currentPrice, onTradeRecor
   const [exitPrice, setExitPrice] = useState<string>("");
   const [showExitForm, setShowExitForm] = useState(false);
 
+  const { price: livePrice, refresh } = useStockPrice(stockTicker);
+  const currentPrice = livePrice || initialPrice;
   const templateNames = ALERT_TEMPLATES.map((t) => t.name);
 
   const handleRecordEntry = () => {
@@ -127,6 +130,16 @@ export default function TradeEntryForm({ stockTicker, currentPrice, onTradeRecor
           {/* Current Price & Unrealized Return */}
           {entryPrice && (
             <Card className="bg-slate-700 border-slate-600 p-3">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-slate-400 text-xs font-semibold">Live Price Data</p>
+                <Button
+                  onClick={refresh}
+                  size="sm"
+                  className="bg-slate-600 hover:bg-slate-500 text-white h-6 px-2 text-xs"
+                >
+                  <RefreshCw size={12} />
+                </Button>
+              </div>
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
                   <p className="text-slate-400 mb-1">Current Price</p>
