@@ -9,7 +9,7 @@
 - [x] Add error handling and retry logic
 - [x] Implement caching strategy for API responses
 - [x] Write backend unit tests for sentiment service (11 tests passing)
-- [ ] Write integration tests for API endpoints
+- [x] Write integration tests for API endpoints (5 news API tests passing)
 - [x] Update frontend marketDataApi to use backend endpoints
 - [ ] Test live data integration
 
@@ -48,7 +48,7 @@
 
 ### Integration
 - [x] Add news feed to Portfolio Dashboard
-- [ ] Add news feed to individual stock cards
+- [x] Add news feed to individual stock cards (StockNews component integrated)
 - [x] Test news feed with portfolio stocks
 - [x] Save checkpoint with news feed feature
 
@@ -64,7 +64,7 @@
 ### Frontend Sentiment Display
 - [x] Add sentiment badges to news article cards
 - [x] Add sentiment filtering in NewsFeed component
-- [ ] Create sentiment distribution chart
+- [x] Create sentiment distribution chart (SentimentDistributionChart component created and integrated)
 - [x] Add color coding for sentiment (green=positive, red=negative, gray=neutral)
 
 ### Testing & Deployment
@@ -157,7 +157,7 @@
 - [x] Total: 72 tests passing across 6 test files
 - [x] Create testing summary documentation (TESTING_SUMMARY.md)
 - [x] Create deployment documentation (DEPLOYMENT_MANUS.md, DEPLOYMENT_AWS.md)
-- [ ] Create final checkpoint with all tests and deployment config
+- [x] Create final checkpoint with all tests and deployment config
 
 ## Production Deployment & New Features
 
@@ -217,8 +217,8 @@
 - [x] Test alerts dashboard functionality
 - [x] Test sentiment chart data visualization
 - [x] Verify API integration
-- [ ] Create final checkpoint
-- [ ] Deploy to production via Publish button
+- [x] Create final checkpoint
+- [ ] Deploy to production via Manus Publish button (manual action required)
 
 ## Sentiment History Collection & Portfolio Performance
 
@@ -252,8 +252,8 @@
 - [x] Test portfolio performance dashboard with real data
 - [x] Verify performance metrics calculation
 - [x] Test S&P 500 benchmark comparison
-- [ ] Create final checkpoint
-- [ ] Deploy to production
+- [x] Create final checkpoint
+- [ ] Deploy to production via Manus Publish button (manual action required)
 
 ## Portfolio Allocation Pie Chart
 

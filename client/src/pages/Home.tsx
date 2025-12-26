@@ -11,6 +11,7 @@ import PerformanceDashboard from "@/components/PerformanceDashboard";
 import PortfolioDashboard from "@/components/PortfolioDashboard";
 import RiskBasedPortfolios from "@/components/RiskBasedPortfolios";
 import SentimentPortfolioView from "@/components/SentimentPortfolioView";
+import { SentimentDistributionChart } from "@/components/SentimentDistributionChart";
 
 export default function Home() {
   // The userAuth hooks provides authentication state
@@ -179,6 +180,8 @@ export default function Home() {
                   </p>
                 </div>
               </Card>
+              
+              <SentimentDistributionChart tickers={["AAPL", "MSFT", "GOOGL", "NVDA", "TSLA", "JPM", "UNH", "JNJ"]} />
               
               <Tabs defaultValue="moderate" className="w-full">
                 <TabsList className="grid w-full grid-cols-3 bg-slate-700">

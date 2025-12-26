@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Trash2, TrendingUp, TrendingDown, ChevronDown, ChevronUp } from "lucide-react";
 import SentimentTrendChart from "@/components/SentimentTrendChart";
+import { StockNews } from "@/components/StockNews";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -516,8 +517,11 @@ export default function Watchlists() {
                               </div>
                             </div>
                             {isExpanded && (
-                              <div className="p-4 border-t">
+                              <div className="p-4 border-t space-y-6">
                                 <SentimentTrendChart ticker={stock.ticker} />
+                                <div className="border-t pt-6">
+                                  <StockNews ticker={stock.ticker} maxArticles={5} />
+                                </div>
                               </div>
                             )}
                           </div>
