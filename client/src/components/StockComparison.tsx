@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { X, ChevronDown, Download } from "lucide-react";
 import { exportFilteredStocksAsCSV, exportComparisonAsCSV, exportDetailedReport } from "@/lib/csvExport";
 import WatchlistManager from "./WatchlistManager";
+import PriceAlertManager from "./PriceAlertManager";
 
 interface Stock {
   ticker: string;
@@ -457,6 +458,11 @@ export default function StockComparison() {
                       {stock.upsideMin}%
                     </div>
                   </div>
+                </div>
+
+                {/* Price Alert Manager */}
+                <div className="mt-4 pt-4 border-t border-slate-700">
+                  <PriceAlertManager ticker={stock.ticker} currentPrice={stock.price} />
                 </div>
               </div>
             </Card>
