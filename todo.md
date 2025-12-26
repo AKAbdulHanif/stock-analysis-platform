@@ -8,7 +8,7 @@
 - [x] Implement historical chart data endpoint (GET /api/stock-chart/:ticker)
 - [x] Add error handling and retry logic
 - [x] Implement caching strategy for API responses
-- [ ] Write backend unit tests for API services
+- [x] Write backend unit tests for sentiment service (11 tests passing)
 - [ ] Write integration tests for API endpoints
 - [x] Update frontend marketDataApi to use backend endpoints
 - [ ] Test live data integration
@@ -92,7 +92,7 @@
 - [x] Identify stocks with declining sentiment for reduction
 - [x] Identify stocks with improving sentiment for increase
 - [x] Generate rebalancing alerts and recommendations
-- [ ] Add rebalancing UI to portfolio dashboard
+- [x] Add rebalancing UI to portfolio dashboard
 
 ### UI Updates
 - [x] Add sentiment score badges to stock cards
@@ -105,4 +105,8 @@
 - [x] Test sentiment scoring accuracy
 - [x] Test portfolio generation with sentiment weights
 - [x] Test rebalancing recommendations
+- [x] Integrate SentimentPortfolioView into main page UI
+- [x] Test Conservative, Moderate, and Aggressive portfolio tabs
+- [x] Verify sentiment data display and rebalancing recommendations
+- [x] Write and pass backend unit tests for sentiment service (11/11 passing)
 - [x] Save checkpoint with sentiment-based recommendations
