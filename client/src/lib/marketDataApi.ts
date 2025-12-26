@@ -1,94 +1,80 @@
 /**
  * Market Data API Integration
- * Fetches real-time stock data using Manus Data API (Yahoo Finance)
+ * Fetches real-time stock data using backend Yahoo Finance API
  */
 
 export interface StockQuote {
-  symbol: string;
+  ticker: string;
   price: number;
-  currency: string;
-  exchange: string;
+  change: number;
+  changePercent: number;
   dayHigh: number;
   dayLow: number;
-  fiftyTwoWeekHigh: number;
-  fiftyTwoWeekLow: number;
+  open: number;
+  previousClose: number;
   volume: number;
-  marketCap: number;
-  pe: number;
-  eps: number;
-  dividend: number;
-  lastUpdate: string;
+  marketCap?: number;
+  peRatio?: number;
+  dividendYield?: number;
+  fiftyTwoWeekHigh?: number;
+  fiftyTwoWeekLow?: number;
+  timestamp: number;
+}
+
+export interface ChartDataPoint {
+  timestamp: number;
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
 }
 
 export interface ChartData {
-  timestamp: number[];
-  open: (number | null)[];
-  high: (number | null)[];
-  low: (number | null)[];
-  close: (number | null)[];
-  volume: (number | null)[];
-  adjClose: (number | null)[];
+  ticker: string;
+  dataPoints: ChartDataPoint[];
+  period: string;
 }
 
 // Cache for API responses to reduce calls
-const priceCache: Map<string, { data: StockQuote; timestamp: number }> = new Map();
-const CACHE_DURATION = 60000; // 1 minute cache
+const quoteCache: Map<string, { data: StockQuote; timestamp: number }> = new Map();
+const chartCache: Map<string, { data: ChartData; timestamp: number }> = new Map();
+const QUOTE_CACHE_DURATION = 60000; // 1 minute cache
+const CHART_CACHE_DURATION = 300000; // 5 minute cache
 
 /**
- * Fetch current stock quote from Manus Data API
+ * Fetch current stock quote from backend API
  */
-export async function fetchStockQuote(symbol: string): Promise<StockQuote | null> {
+export async function fetchStockQuote(ticker: string): Promise<StockQuote | null> {
   try {
     // Check cache first
-    const cached = priceCache.get(symbol);
-    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    const cached = quoteCache.get(ticker);
+    if (cached && Date.now() - cached.timestamp < QUOTE_CACHE_DURATION) {
       return cached.data;
     }
 
-    // Call Manus Data API
-    const response = await fetch("/api/stock-quote", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ symbol })
-    });
+    // Call backend API
+    const response = await fetch(`/api/stock-quote/${ticker}`);
 
     if (!response.ok) {
-      console.error(`API error for ${symbol}:`, response.statusText);
+      console.error(`API error for ${ticker}:`, response.statusText);
       return null;
     }
 
     const data = await response.json();
     
     if (data.error) {
-      console.error(`API error for ${symbol}:`, data.error);
+      console.error(`API error for ${ticker}:`, data.error);
       return null;
     }
 
-    const quote: StockQuote = {
-      symbol: data.symbol || symbol,
-      price: data.price || 0,
-      currency: data.currency || "USD",
-      exchange: data.exchange || "",
-      dayHigh: data.dayHigh || 0,
-      dayLow: data.dayLow || 0,
-      fiftyTwoWeekHigh: data.fiftyTwoWeekHigh || 0,
-      fiftyTwoWeekLow: data.fiftyTwoWeekLow || 0,
-      volume: data.volume || 0,
-      marketCap: data.marketCap || 0,
-      pe: data.pe || 0,
-      eps: data.eps || 0,
-      dividend: data.dividend || 0,
-      lastUpdate: new Date().toISOString()
-    };
-
     // Cache the result
-    priceCache.set(symbol, { data: quote, timestamp: Date.now() });
+    quoteCache.set(ticker, { data, timestamp: Date.now() });
 
-    return quote;
+    return data;
   } catch (error) {
-    console.error(`Error fetching quote for ${symbol}:`, error);
+    console.error(`Error fetching quote for ${ticker}:`, error);
     return null;
   }
 }
@@ -97,43 +83,39 @@ export async function fetchStockQuote(symbol: string): Promise<StockQuote | null
  * Fetch historical chart data for a stock
  */
 export async function fetchStockChart(
-  symbol: string,
-  range: "1d" | "5d" | "1mo" | "3mo" | "6mo" | "1y" = "1mo"
+  ticker: string,
+  period: '1d' | '5d' | '1mo' | '3mo' | '6mo' | '1y' = '1mo',
+  interval: '1m' | '5m' | '15m' | '1h' | '1d' | '1wk' | '1mo' = '1d'
 ): Promise<ChartData | null> {
   try {
-    const response = await fetch("/api/stock-chart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ symbol, range })
-    });
+    const cacheKey = `${ticker}-${period}-${interval}`;
+    
+    // Check cache first
+    const cached = chartCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CHART_CACHE_DURATION) {
+      return cached.data;
+    }
+
+    const response = await fetch(`/api/stock-chart/${ticker}?period=${period}&interval=${interval}`);
 
     if (!response.ok) {
-      console.error(`API error for ${symbol}:`, response.statusText);
+      console.error(`API error for ${ticker}:`, response.statusText);
       return null;
     }
 
     const data = await response.json();
 
     if (data.error) {
-      console.error(`API error for ${symbol}:`, data.error);
+      console.error(`API error for ${ticker}:`, data.error);
       return null;
     }
 
-    const chartData: ChartData = {
-      timestamp: data.timestamp || [],
-      open: data.open || [],
-      high: data.high || [],
-      low: data.low || [],
-      close: data.close || [],
-      volume: data.volume || [],
-      adjClose: data.adjClose || []
-    };
+    // Cache the result
+    chartCache.set(cacheKey, { data, timestamp: Date.now() });
 
-    return chartData;
+    return data;
   } catch (error) {
-    console.error(`Error fetching chart for ${symbol}:`, error);
+    console.error(`Error fetching chart for ${ticker}:`, error);
     return null;
   }
 }
@@ -141,12 +123,12 @@ export async function fetchStockChart(
 /**
  * Fetch multiple stock quotes in parallel
  */
-export async function fetchMultipleQuotes(symbols: string[]): Promise<Map<string, StockQuote | null>> {
+export async function fetchMultipleQuotes(tickers: string[]): Promise<Map<string, StockQuote | null>> {
   const results = new Map<string, StockQuote | null>();
   
-  const promises = symbols.map(async (symbol) => {
-    const quote = await fetchStockQuote(symbol);
-    results.set(symbol, quote);
+  const promises = tickers.map(async (ticker) => {
+    const quote = await fetchStockQuote(ticker);
+    results.set(ticker, quote);
   });
 
   await Promise.all(promises);
@@ -157,15 +139,22 @@ export async function fetchMultipleQuotes(symbols: string[]): Promise<Map<string
  * Clear the price cache
  */
 export function clearPriceCache(): void {
-  priceCache.clear();
+  quoteCache.clear();
+  chartCache.clear();
 }
 
 /**
  * Get cache statistics
  */
-export function getCacheStats(): { size: number; entries: string[] } {
+export function getCacheStats(): { quotes: { size: number; entries: string[] }, charts: { size: number; entries: string[] } } {
   return {
-    size: priceCache.size,
-    entries: Array.from(priceCache.keys())
+    quotes: {
+      size: quoteCache.size,
+      entries: Array.from(quoteCache.keys())
+    },
+    charts: {
+      size: chartCache.size,
+      entries: Array.from(chartCache.keys())
+    }
   };
 }

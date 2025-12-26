@@ -8,6 +8,7 @@ import StockComparison from "@/components/StockComparison";
 import PriceUpdateIndicator from "@/components/PriceUpdateIndicator";
 import PerformanceDashboard from "@/components/PerformanceDashboard";
 import PortfolioDashboard from "@/components/PortfolioDashboard";
+import RiskBasedPortfolios from "@/components/RiskBasedPortfolios";
 
 export default function Home() {
   // The userAuth hooks provides authentication state
@@ -106,9 +107,12 @@ export default function Home() {
 
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-12">
-          <TabsList className="grid w-full grid-cols-5 bg-slate-800 border border-slate-700">
+          <TabsList className="grid w-full grid-cols-6 bg-slate-800 border border-slate-700">
             <TabsTrigger value="portfolio" className="text-slate-300 data-[state=active]:text-white data-[state=active]:bg-slate-700">
               Portfolio
+            </TabsTrigger>
+            <TabsTrigger value="risk-portfolios" className="text-slate-300 data-[state=active]:text-white data-[state=active]:bg-slate-700">
+              Risk Portfolios
             </TabsTrigger>
             <TabsTrigger value="overview" className="text-slate-300 data-[state=active]:text-white data-[state=active]:bg-slate-700">
               Overview
@@ -127,6 +131,11 @@ export default function Home() {
           {/* Portfolio Tab */}
           <TabsContent value="portfolio" className="space-y-6">
             <PortfolioDashboard />
+          </TabsContent>
+
+          {/* Risk Portfolios Tab */}
+          <TabsContent value="risk-portfolios" className="space-y-6">
+            <RiskBasedPortfolios />
           </TabsContent>
 
           {/* Overview Tab */}
