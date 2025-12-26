@@ -5,6 +5,9 @@
  */
 
 import { Router, Request, Response } from "express";
+import { getDb } from "../db";
+import { watchlistStocks } from "../../drizzle/schema";
+import { eq } from "drizzle-orm";
 import {
   calculatePortfolioValue,
   recordPortfolioSnapshot,
@@ -165,5 +168,118 @@ router.post("/:watchlistId/compare", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+/**
+ * GET /api/performance/:watchlistId/allocation
+ * Get portfolio allocation by stock and sector
+ */
+router.get("/:watchlistId/allocation", async (req: Request, res: Response) => {
+  try {
+    const watchlistId = parseInt(req.params.watchlistId);
+
+    if (isNaN(watchlistId)) {
+      return res.status(400).json({ error: "Invalid watchlist ID" });
+    }
+
+    // Get watchlist stocks
+    const db = await getDb();
+    const stocks = await db
+      .select()
+      .from(watchlistStocks)
+      .where(eq(watchlistStocks.watchlistId, watchlistId));
+
+    if (stocks.length === 0) {
+      return res.json({ byStock: [], bySector: [] });
+    }
+
+    // Fetch current prices for all stocks
+    const tickers = stocks.map(s => s.ticker);
+    const { getStockQuote } = await import("../services/yahooFinanceService");
+    
+    const stockData = await Promise.all(
+      tickers.map(async (ticker) => {
+        try {
+          // Fetch stock quote using the API endpoint format
+          const response = await fetch(`http://localhost:3000/api/stock-quote/${ticker}`);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${ticker}`);
+          }
+          const quote = await response.json();
+          return {
+            ticker,
+            price: quote.price || 0,
+            sector: getSectorForStock(ticker),
+          };
+        } catch (error) {
+          console.error(`Error fetching price for ${ticker}:`, error);
+          return { ticker, price: 0, sector: "Unknown" };
+        }
+      })
+    );
+
+    // Since watchlists don't track quantities, use equal weighting
+    const equalWeight = 100 / stockData.length;
+    const totalValue = stockData.reduce((sum, stock) => sum + stock.price, 0);
+
+    // Calculate allocation by stock (equal weight)
+    const byStock = stockData.map((stock) => ({
+      ticker: stock.ticker,
+      value: stock.price,
+      percentage: equalWeight,
+      sector: stock.sector,
+    }));
+
+    // Calculate allocation by sector (sum equal weights per sector)
+    const sectorMap = new Map<string, { count: number; value: number }>();
+    stockData.forEach((stock) => {
+      const current = sectorMap.get(stock.sector) || { count: 0, value: 0 };
+      sectorMap.set(stock.sector, {
+        count: current.count + 1,
+        value: current.value + stock.price,
+      });
+    });
+
+    const bySector = Array.from(sectorMap.entries()).map(([sector, data]) => ({
+      sector,
+      value: data.value,
+      percentage: (data.count / stockData.length) * 100,
+    }));
+
+    res.json({ byStock, bySector, totalValue });
+  } catch (error) {
+    console.error("Error fetching portfolio allocation:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Helper function to map stocks to sectors
+function getSectorForStock(ticker: string): string {
+  const sectorMap: Record<string, string> = {
+    // Technology
+    AAPL: "Technology",
+    MSFT: "Technology",
+    GOOGL: "Technology",
+    NVDA: "Technology",
+    TSM: "Technology",
+    AVGO: "Technology",
+    ASML: "Technology",
+    MU: "Technology",
+    TXN: "Technology",
+    // Healthcare
+    UNH: "Healthcare",
+    JNJ: "Healthcare",
+    ISRG: "Healthcare",
+    LLY: "Healthcare",
+    ABBV: "Healthcare",
+    // Financials
+    JPM: "Financials",
+    BAC: "Financials",
+    GS: "Financials",
+    // Consumer
+    AMZN: "Consumer",
+    TSLA: "Consumer",
+  };
+  return sectorMap[ticker] || "Other";
+}
 
 export default router;

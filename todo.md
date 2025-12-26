@@ -254,3 +254,27 @@
 - [x] Test S&P 500 benchmark comparison
 - [ ] Create final checkpoint
 - [ ] Deploy to production
+
+## Portfolio Allocation Pie Chart
+
+### Backend API
+- [x] Create API endpoint to fetch portfolio allocation by stock
+- [x] Calculate percentage allocation for each stock (equal weighting)
+- [x] Group stocks by sector for sector allocation view
+- [x] Return allocation data with values and percentages
+- [x] Fix price fetching from Yahoo Finance API
+
+### Frontend Visualization
+- [x] Add pie chart component using Recharts
+- [x] Display stock allocation pie chart
+- [x] Display sector allocation pie chart
+- [x] Add toggle to switch between stock and sector views
+- [x] Show allocation percentages and values
+- [x] Add allocation table with color indicators
+- [x] Display total portfolio value
+
+### Testing
+- [x] Test allocation calculations with real portfolio data (AAPL)
+- [x] Verify pie chart renders correctly
+- [x] Test toggle between stock and sector views
+- [ ] Create final checkpoint

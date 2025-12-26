@@ -20,6 +20,9 @@ import {
   Line,
   AreaChart,
   Area,
+  PieChart,
+  Pie,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -59,6 +62,37 @@ interface BenchmarkComparison {
   outperformance: boolean;
 }
 
+interface StockAllocation {
+  ticker: string;
+  value: number;
+  percentage: number;
+  sector: string;
+}
+
+interface SectorAllocation {
+  sector: string;
+  value: number;
+  percentage: number;
+}
+
+interface AllocationData {
+  byStock: StockAllocation[];
+  bySector: SectorAllocation[];
+  totalValue: number;
+}
+
+// Color palette for pie chart
+const COLORS = [
+  "#10b981", // green
+  "#3b82f6", // blue
+  "#f59e0b", // amber
+  "#8b5cf6", // purple
+  "#ef4444", // red
+  "#06b6d4", // cyan
+  "#ec4899", // pink
+  "#14b8a6", // teal
+];
+
 export default function Performance() {
   const [watchlistId] = useState(1); // Default to first watchlist
   const [period, setPeriod] = useState<30 | 90 | 180 | 365>(30);
@@ -66,6 +100,8 @@ export default function Performance() {
   const [portfolioHistory, setPortfolioHistory] = useState<PerformanceDataPoint[]>([]);
   const [benchmarkHistory, setBenchmarkHistory] = useState<BenchmarkDataPoint[]>([]);
   const [comparison, setComparison] = useState<BenchmarkComparison | null>(null);
+  const [allocation, setAllocation] = useState<AllocationData | null>(null);
+  const [allocationView, setAllocationView] = useState<"stock" | "sector">("stock");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -115,6 +151,13 @@ export default function Performance() {
       if (comparisonRes.ok) {
         const comparisonData = await comparisonRes.json();
         setComparison(comparisonData);
+      }
+
+      // Fetch allocation data
+      const allocationRes = await fetch(`/api/performance/${watchlistId}/allocation`);
+      if (allocationRes.ok) {
+        const allocationData = await allocationRes.json();
+        setAllocation(allocationData);
       }
     } catch (error) {
       console.error("Error fetching performance data:", error);
@@ -292,6 +335,100 @@ export default function Performance() {
               <p className="text-sm text-slate-400 mb-1">Beta</p>
               <p className="text-xl font-bold text-white">{comparison.beta.toFixed(2)}</p>
               <p className="text-xs text-slate-500 mt-1">Relative volatility</p>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Portfolio Allocation Pie Chart */}
+      {allocation && (
+        <Card className="bg-slate-900/50 border-slate-800 p-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-semibold text-white">Portfolio Allocation</h3>
+            <div className="flex gap-2">
+              <Button
+                variant={allocationView === "stock" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setAllocationView("stock")}
+                className={allocationView === "stock" ? "bg-green-600 hover:bg-green-700" : "text-slate-400 hover:text-white"}
+              >
+                By Stock
+              </Button>
+              <Button
+                variant={allocationView === "sector" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setAllocationView("sector")}
+                className={allocationView === "sector" ? "bg-green-600 hover:bg-green-700" : "text-slate-400 hover:text-white"}
+              >
+                By Sector
+              </Button>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Pie Chart */}
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={allocationView === "stock" ? allocation.byStock : allocation.bySector}
+                  dataKey="percentage"
+                  nameKey={allocationView === "stock" ? "ticker" : "sector"}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  label={({ name, percentage }) => `${name} ${percentage.toFixed(1)}%`}
+                  labelLine={false}
+                >
+                  {(allocationView === "stock" ? allocation.byStock : allocation.bySector).map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1e293b",
+                    border: "1px solid #334155",
+                    borderRadius: "8px",
+                  }}
+                  formatter={(value: number, name: string, props: any) => [
+                    `${value.toFixed(2)}% ($${props.payload.value.toFixed(2)})`,
+                    name,
+                  ]}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+
+            {/* Allocation Table */}
+            <div className="space-y-2">
+              <div className="text-sm text-slate-400 mb-3">
+                Total Portfolio Value: <span className="text-white font-semibold">${allocation.totalValue.toFixed(2)}</span>
+              </div>
+              <div className="max-h-[260px] overflow-y-auto space-y-2">
+                {(allocationView === "stock" ? allocation.byStock : allocation.bySector).map((item, index) => (
+                  <div
+                    key={allocationView === "stock" ? (item as StockAllocation).ticker : (item as SectorAllocation).sector}
+                    className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-4 h-4 rounded-full"
+                        style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                      />
+                      <div>
+                        <p className="text-white font-medium">
+                          {allocationView === "stock" ? (item as StockAllocation).ticker : (item as SectorAllocation).sector}
+                        </p>
+                        {allocationView === "stock" && (
+                          <p className="text-xs text-slate-400">{(item as StockAllocation).sector}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-white font-semibold">{item.percentage.toFixed(1)}%</p>
+                      <p className="text-xs text-slate-400">${item.value.toFixed(2)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </Card>
