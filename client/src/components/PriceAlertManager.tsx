@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Bell, Trash2, CheckCircle, AlertCircle, History } from "lucide-react";
+import AlertTemplateSelector from "./AlertTemplateSelector";
 import {
   createPriceAlert,
   getStockAlerts,
@@ -343,6 +344,16 @@ export default function PriceAlertManager({ ticker, currentPrice }: PriceAlertMa
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Alert Template Selector */}
+      <AlertTemplateSelector
+        ticker={ticker}
+        currentPrice={currentPrice}
+        onTemplateApplied={() => {
+          loadAlerts();
+          loadStats();
+        }}
+      />
 
       {/* Test Alert Button (for demo) */}
       <Button
