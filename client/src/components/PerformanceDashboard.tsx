@@ -16,6 +16,7 @@ import {
   type TemplatePerformance,
   type TradeEntry
 } from "@/lib/performanceTracking";
+import StrategyComparisonReport from "./StrategyComparisonReport";
 
 export default function PerformanceDashboard() {
   const [templatePerformance, setTemplatePerformance] = useState<TemplatePerformance[]>([]);
@@ -283,6 +284,9 @@ export default function PerformanceDashboard() {
                   )}
                 </Card>
               )}
+
+              {/* Strategy Comparison Reports */}
+              <StrategyComparisonReport />
 
               {/* Data Management */}
               <div className="flex gap-2">
