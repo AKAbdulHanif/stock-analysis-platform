@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { X, ChevronDown, Download } from "lucide-react";
 import { exportFilteredStocksAsCSV, exportComparisonAsCSV, exportDetailedReport } from "@/lib/csvExport";
+import WatchlistManager from "./WatchlistManager";
 
 interface Stock {
   ticker: string;
@@ -333,6 +334,16 @@ export default function StockComparison() {
         </Button>
       </Card>
 
+      {/* Watchlist Manager */}
+      {selectedStocks.length > 0 && (
+        <WatchlistManager
+          selectedStocks={selectedStocks}
+          onLoadWatchlist={(stocks) => {
+            setSelectedStocks(stocks);
+          }}
+        />
+      )}
+
       {/* Results Count & Export Buttons */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <p className="text-slate-300">
@@ -547,6 +558,16 @@ export default function StockComparison() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Watchlist Manager for Comparison */}
+          <div className="mt-6 pt-6 border-t border-slate-700">
+            <WatchlistManager
+              selectedStocks={comparisonStocks.map((s) => s.ticker)}
+              onLoadWatchlist={(stocks) => {
+                setSelectedStocks(stocks);
+              }}
+            />
           </div>
 
           {/* Export & Comparison Insights */}
