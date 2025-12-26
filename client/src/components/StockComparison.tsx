@@ -8,6 +8,8 @@ import { X, ChevronDown, Download } from "lucide-react";
 import { exportFilteredStocksAsCSV, exportComparisonAsCSV, exportDetailedReport } from "@/lib/csvExport";
 import WatchlistManager from "./WatchlistManager";
 import PriceAlertManager from "./PriceAlertManager";
+import TradeEntryForm from "./TradeEntryForm";
+import TradeHistory from "./TradeHistory";
 
 interface Stock {
   ticker: string;
@@ -460,9 +462,13 @@ export default function StockComparison() {
                   </div>
                 </div>
 
-                {/* Price Alert Manager */}
-                <div className="mt-4 pt-4 border-t border-slate-700">
+                {/* Price Alert Manager & Trade Entry */}
+                <div className="mt-4 pt-4 border-t border-slate-700 space-y-3">
                   <PriceAlertManager ticker={stock.ticker} currentPrice={stock.price} />
+                  <div className="grid grid-cols-2 gap-2">
+                    <TradeEntryForm stockTicker={stock.ticker} currentPrice={stock.price} />
+                    <TradeHistory stockTicker={stock.ticker} onlyActive={true} />
+                  </div>
                 </div>
               </div>
             </Card>
