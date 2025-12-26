@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { X, ChevronDown } from "lucide-react";
+import { X, ChevronDown, Download } from "lucide-react";
+import { exportFilteredStocksAsCSV, exportComparisonAsCSV, exportDetailedReport } from "@/lib/csvExport";
 
 interface Stock {
   ticker: string;
@@ -332,8 +333,8 @@ export default function StockComparison() {
         </Button>
       </Card>
 
-      {/* Results Count */}
-      <div className="flex items-center justify-between">
+      {/* Results Count & Export Buttons */}
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <p className="text-slate-300">
           Showing <span className="font-bold text-emerald-400">{sortedStocks.length}</span> of{" "}
           <span className="font-bold text-emerald-400">{stocks.length}</span> stocks
@@ -343,6 +344,26 @@ export default function StockComparison() {
             </span>
           )}
         </p>
+        <div className="flex gap-2">
+          <Button
+            onClick={() => exportFilteredStocksAsCSV(sortedStocks)}
+            className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+            size="sm"
+          >
+            <Download size={16} />
+            Export Filtered List
+          </Button>
+          {selectedStocks.length > 0 && (
+            <Button
+              onClick={() => exportComparisonAsCSV(comparisonStocks)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-2"
+              size="sm"
+            >
+              <Download size={16} />
+              Export Comparison
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Stock List with Selection */}
@@ -528,9 +549,19 @@ export default function StockComparison() {
             </table>
           </div>
 
-          {/* Comparison Insights */}
+          {/* Export & Comparison Insights */}
           <div className="mt-6 pt-6 border-t border-slate-700">
-            <h4 className="text-white font-semibold mb-4">Quick Insights</h4>
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-white font-semibold">Quick Insights</h4>
+              <Button
+                onClick={() => exportDetailedReport(sortedStocks, comparisonStocks)}
+                className="bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2"
+                size="sm"
+              >
+                <Download size={16} />
+                Export Full Report
+              </Button>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-slate-700/50 p-4 rounded">
                 <p className="text-slate-400 text-xs mb-2">Avg P/E Ratio</p>
