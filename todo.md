@@ -110,3 +110,51 @@
 - [x] Verify sentiment data display and rebalancing recommendations
 - [x] Write and pass backend unit tests for sentiment service (11/11 passing)
 - [x] Save checkpoint with sentiment-based recommendations
+
+## Backend Testing & Deployment (Current)
+
+### Backend Unit Tests
+- [x] Write unit tests for Yahoo Finance service (yahooFinanceService.ts) - 14/14 passing
+- [x] Write unit tests for news service (newsService.ts) - 14/14 passing
+- [x] Test error handling and retry logic
+- [x] Test caching behavior with mock data
+- [x] Validate data transformation and parsing
+
+### Integration Tests
+- [x] Write integration tests for stock quote API endpoint - 21/21 passing
+- [x] Write integration tests for historical chart API endpoint - included in stock API tests
+- [ ] Write integration tests for news API endpoints
+- [ ] Write integration tests for sentiment portfolio API
+- [x] Test API error responses and status codes
+- [x] Test API validation and edge cases
+
+### Live Market Data Testing
+- [x] Test live stock data fetching with real tickers (AAPL, GOOGL, MSFT, TSLA, NVDA) - 11/11 passing
+- [x] Validate price accuracy and data structure
+- [x] Test caching behavior with live API calls
+- [x] Test error handling with invalid tickers
+- [x] Verify historical data accuracy (1d, 5d, 1mo periods)
+- [x] Test news API with sentiment analysis
+
+### Deployment Documentation (Completed)
+- [x] Create comprehensive Manus hosting deployment guide (DEPLOYMENT_MANUS.md)
+- [x] Create AWS deployment reference guide with Terraform (DEPLOYMENT_AWS.md)
+- [x] Document RDS PostgreSQL configuration
+- [x] Document S3 and CloudFront CDN setup
+- [x] Document ECS/Fargate service definitions
+- [x] Document Application Load Balancer configuration
+- [x] Document Route53 DNS setup
+- [x] Document deployment process and best practices
+- [x] Document environment variables configuration
+- [x] Document CloudWatch logging and monitoring
+- [x] Document cost comparison (AWS vs Manus)
+- [x] Recommend Manus built-in hosting as preferred option
+
+### Testing & Validation (Completed)
+- [x] Run all unit tests - 39/39 passing (100%)
+- [x] Run all integration tests - 21/21 passing (100%)
+- [x] Run live market data tests - 11/11 passing (100%)
+- [x] Total: 72 tests passing across 6 test files
+- [x] Create testing summary documentation (TESTING_SUMMARY.md)
+- [x] Create deployment documentation (DEPLOYMENT_MANUS.md, DEPLOYMENT_AWS.md)
+- [ ] Create final checkpoint with all tests and deployment config
