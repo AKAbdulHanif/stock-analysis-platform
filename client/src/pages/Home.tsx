@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useState } from "react";
 import StockComparison from "@/components/StockComparison";
+import PerformanceDashboard from "@/components/PerformanceDashboard";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -88,6 +89,12 @@ export default function Home() {
             </p>
           </div>
         </Card>
+
+        {/* Performance Dashboard Button */}
+        <div className="mb-8 bg-slate-800 border border-slate-700 rounded-lg p-6">
+          <h3 className="text-white font-semibold mb-4">Strategy Performance Analytics</h3>
+          <PerformanceDashboard />
+        </div>
 
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-12">
