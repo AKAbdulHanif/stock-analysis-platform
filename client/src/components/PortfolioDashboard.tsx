@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from "recharts";
 import { TrendingUp, TrendingDown, DollarSign, Percent, Target, Activity } from "lucide-react";
 import { calculatePortfolioMetrics, calculateSectorAllocation, getStockPositions } from "@/lib/portfolioAnalytics";
+import NewsFeed from "@/components/NewsFeed";
 
 const SECTOR_COLORS: Record<string, string> = {
   "Semiconductors": "#3b82f6",
@@ -221,6 +222,15 @@ export default function PortfolioDashboard() {
             </table>
           </div>
         </Card>
+      )}
+
+      {/* News Feed */}
+      {positions.length > 0 && (
+        <NewsFeed 
+          tickers={positions.map(p => p.ticker)}
+          limit={20}
+          showFilter={true}
+        />
       )}
 
       {/* Portfolio Summary */}

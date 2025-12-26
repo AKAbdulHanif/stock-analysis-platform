@@ -29,3 +29,25 @@
 - [x] Phase 1: Architecture & Foundation
 - [x] Phase 2: Sector Analysis & Validation (Enhanced with FAANG, space, quantum, clean energy exclusion)
 - [x] Phase 3: Risk-Based Portfolio Generation (Conservative, Moderate, Aggressive)
+
+## News Feed Implementation (In Progress)
+
+### Backend News API
+- [x] Create news API service in server/services/newsService.ts
+- [x] Implement news endpoint (GET /api/news/:ticker)
+- [x] Implement portfolio news endpoint (POST /api/news/portfolio)
+- [x] Add caching strategy for news data (5 minute TTL)
+- [x] Add error handling for news API
+
+### Frontend News Feed
+- [x] Create NewsFeed component with article cards
+- [x] Add news filtering by stock ticker
+- [x] Add news sorting by date (most recent first)
+- [x] Create news article card with image, title, summary, source
+- [x] Add "Read More" links to external articles
+
+### Integration
+- [x] Add news feed to Portfolio Dashboard
+- [ ] Add news feed to individual stock cards
+- [x] Test news feed with portfolio stocks
+- [ ] Save checkpoint with news feed feature

@@ -8,6 +8,7 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import stockApiRouter from "../routes/stockApi";
+import newsApiRouter from "../routes/newsApi";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -38,6 +39,8 @@ async function startServer() {
   registerOAuthRoutes(app);
   // Stock API routes
   app.use("/api", stockApiRouter);
+  // News API routes
+  app.use("/api", newsApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",
