@@ -6,6 +6,7 @@ import { useState } from "react";
 import StockComparison from "@/components/StockComparison";
 import PriceUpdateIndicator from "@/components/PriceUpdateIndicator";
 import PerformanceDashboard from "@/components/PerformanceDashboard";
+import PortfolioDashboard from "@/components/PortfolioDashboard";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -100,7 +101,10 @@ export default function Home() {
 
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-12">
-          <TabsList className="grid w-full grid-cols-4 bg-slate-800 border border-slate-700">
+          <TabsList className="grid w-full grid-cols-5 bg-slate-800 border border-slate-700">
+            <TabsTrigger value="portfolio" className="text-slate-300 data-[state=active]:text-white data-[state=active]:bg-slate-700">
+              Portfolio
+            </TabsTrigger>
             <TabsTrigger value="overview" className="text-slate-300 data-[state=active]:text-white data-[state=active]:bg-slate-700">
               Overview
             </TabsTrigger>
@@ -114,6 +118,11 @@ export default function Home() {
               Precious Metals
             </TabsTrigger>
           </TabsList>
+
+          {/* Portfolio Tab */}
+          <TabsContent value="portfolio" className="space-y-6">
+            <PortfolioDashboard />
+          </TabsContent>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
