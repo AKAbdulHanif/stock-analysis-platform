@@ -8,6 +8,7 @@ import { PriceProvider } from "./contexts/PriceContext";
 import Home from "./pages/Home";
 import Watchlists from "./pages/Watchlists";
 import Alerts from "./pages/Alerts";
+import Performance from "./pages/Performance";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -16,6 +17,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/watchlists"} component={Watchlists} />
       <Route path={"/alerts"} component={Alerts} />
+      <Route path={"/performance"} component={Performance} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

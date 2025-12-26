@@ -105,3 +105,34 @@ export const sentimentHistory = mysqlTable("sentiment_history", {
 
 export type SentimentHistory = typeof sentimentHistory.$inferSelect;
 export type InsertSentimentHistory = typeof sentimentHistory.$inferInsert;
+
+/**
+ * Portfolio Snapshots - Daily portfolio value snapshots for performance tracking
+ */
+export const portfolioSnapshots = mysqlTable("portfolio_snapshots", {
+  id: int("id").autoincrement().primaryKey(),
+  watchlistId: int("watchlistId").notNull(),
+  date: timestamp("date").notNull(),
+  totalValue: varchar("totalValue", { length: 20 }).notNull(), // Total portfolio value
+  dailyReturn: varchar("dailyReturn", { length: 20 }), // Daily return percentage
+  cumulativeReturn: varchar("cumulativeReturn", { length: 20 }), // Cumulative return since inception
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type PortfolioSnapshot = typeof portfolioSnapshots.$inferSelect;
+export type InsertPortfolioSnapshot = typeof portfolioSnapshots.$inferInsert;
+
+/**
+ * Benchmark Data - S&P 500 historical data for comparison
+ */
+export const benchmarkData = mysqlTable("benchmark_data", {
+  id: int("id").autoincrement().primaryKey(),
+  ticker: varchar("ticker", { length: 10 }).notNull(), // ^GSPC for S&P 500
+  date: timestamp("date").notNull(),
+  closePrice: varchar("closePrice", { length: 20 }).notNull(),
+  dailyReturn: varchar("dailyReturn", { length: 20 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type BenchmarkData = typeof benchmarkData.$inferSelect;
+export type InsertBenchmarkData = typeof benchmarkData.$inferInsert;

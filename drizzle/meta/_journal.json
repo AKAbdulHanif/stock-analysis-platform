@@ -15,6 +15,13 @@
       "when": 1766788601462,
       "tag": "0001_parallel_lady_bullseye",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1766790967076,
+      "tag": "0002_silky_whizzer",
+      "breakpoints": true
     }
   ]
 }

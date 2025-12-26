@@ -117,8 +117,18 @@ export default function Home() {
 
         {/* Performance Dashboard Button */}
         <div className="mb-8 bg-slate-800 border border-slate-700 rounded-lg p-6">
-          <h3 className="text-white font-semibold mb-4">Strategy Performance Analytics</h3>
-          <PerformanceDashboard />
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-white font-semibold mb-2">Portfolio Performance Analytics</h3>
+              <p className="text-slate-400 text-sm">Track your returns and compare against the S&P 500</p>
+            </div>
+            <Link href="/performance">
+              <Button className="bg-green-600 hover:bg-green-700 text-white">
+                <BarChart3 className="mr-2 h-4 w-4" />
+                View Performance Dashboard
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Tabs Navigation */}

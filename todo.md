@@ -233,20 +233,24 @@
 - [x] Test sentiment collection with AAPL (successful)
 
 ### Portfolio Performance Tracking
-- [ ] Design portfolio performance database schema
-- [ ] Create portfolio snapshot table (daily holdings values)
-- [ ] Build performance calculation service (returns, volatility, Sharpe ratio)
-- [ ] Create API endpoints for performance data
-- [ ] Build performance dashboard UI
-- [ ] Add historical return charts (1M, 3M, 6M, 1Y)
-- [ ] Display risk metrics (volatility, max drawdown, beta)
-- [ ] Add benchmark comparison (S&P 500)
-- [ ] Test performance calculations
+- [x] Design portfolio performance database schema
+- [x] Create portfolio snapshot table (daily holdings values)
+- [x] Build performance calculation service (returns, volatility, Sharpe ratio)
+- [x] Fetch S&P 500 benchmark data for comparison (using ^GSPC ticker)
+- [x] Create API endpoints for performance data (6 endpoints)
+- [x] Build performance dashboard UI with Recharts
+- [x] Add historical return charts (1M, 3M, 6M, 1Y period selector)
+- [x] Display risk metrics (volatility, max drawdown, Sharpe ratio)
+- [x] Add benchmark comparison chart (portfolio vs S&P 500)
+- [x] Test performance calculations with real data (snapshot recorded, benchmark fetched)
 
 ### Testing & Deployment
 - [x] Test sentiment collection job (AAPL successful)
 - [x] Test sentiment history API endpoint
 - [x] Verify sentiment chart displays correctly with real data
 - [x] Fix string-to-number parsing in frontend
+- [x] Test portfolio performance dashboard with real data
+- [x] Verify performance metrics calculation
+- [x] Test S&P 500 benchmark comparison
 - [ ] Create final checkpoint
 - [ ] Deploy to production
