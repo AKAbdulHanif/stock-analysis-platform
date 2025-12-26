@@ -9,6 +9,7 @@ import PriceUpdateIndicator from "@/components/PriceUpdateIndicator";
 import PerformanceDashboard from "@/components/PerformanceDashboard";
 import PortfolioDashboard from "@/components/PortfolioDashboard";
 import RiskBasedPortfolios from "@/components/RiskBasedPortfolios";
+import SentimentPortfolioView from "@/components/SentimentPortfolioView";
 
 export default function Home() {
   // The userAuth hooks provides authentication state
@@ -107,12 +108,15 @@ export default function Home() {
 
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-12">
-          <TabsList className="grid w-full grid-cols-6 bg-slate-800 border border-slate-700">
+          <TabsList className="grid w-full grid-cols-7 bg-slate-800 border border-slate-700">
             <TabsTrigger value="portfolio" className="text-slate-300 data-[state=active]:text-white data-[state=active]:bg-slate-700">
               Portfolio
             </TabsTrigger>
             <TabsTrigger value="risk-portfolios" className="text-slate-300 data-[state=active]:text-white data-[state=active]:bg-slate-700">
               Risk Portfolios
+            </TabsTrigger>
+            <TabsTrigger value="sentiment" className="text-slate-300 data-[state=active]:text-white data-[state=active]:bg-slate-700">
+              Sentiment Analysis
             </TabsTrigger>
             <TabsTrigger value="overview" className="text-slate-300 data-[state=active]:text-white data-[state=active]:bg-slate-700">
               Overview
@@ -136,6 +140,41 @@ export default function Home() {
           {/* Risk Portfolios Tab */}
           <TabsContent value="risk-portfolios" className="space-y-6">
             <RiskBasedPortfolios />
+          </TabsContent>
+
+          {/* Sentiment Analysis Tab */}
+          <TabsContent value="sentiment" className="space-y-6">
+            <div className="space-y-6">
+              <Card className="bg-slate-800 border-slate-700">
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white mb-2">Sentiment-Adjusted Portfolios</h3>
+                  <p className="text-slate-400">
+                    View portfolio recommendations adjusted based on real-time news sentiment analysis.
+                    Allocations are dynamically weighted to favor stocks with positive sentiment momentum.
+                  </p>
+                </div>
+              </Card>
+              
+              <Tabs defaultValue="moderate" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 bg-slate-700">
+                  <TabsTrigger value="conservative">Conservative</TabsTrigger>
+                  <TabsTrigger value="moderate">Moderate</TabsTrigger>
+                  <TabsTrigger value="aggressive">Aggressive</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="conservative">
+                  <SentimentPortfolioView portfolioId="conservative" />
+                </TabsContent>
+                
+                <TabsContent value="moderate">
+                  <SentimentPortfolioView portfolioId="moderate" />
+                </TabsContent>
+                
+                <TabsContent value="aggressive">
+                  <SentimentPortfolioView portfolioId="aggressive" />
+                </TabsContent>
+              </Tabs>
+            </div>
           </TabsContent>
 
           {/* Overview Tab */}

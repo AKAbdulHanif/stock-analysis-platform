@@ -9,6 +9,7 @@ import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import stockApiRouter from "../routes/stockApi";
 import newsApiRouter from "../routes/newsApi";
+import sentimentPortfolioApiRouter from "../routes/sentimentPortfolioApi";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -41,6 +42,8 @@ async function startServer() {
   app.use("/api", stockApiRouter);
   // News API routes
   app.use("/api", newsApiRouter);
+  // Sentiment Portfolio API routes
+  app.use("/api/sentiment", sentimentPortfolioApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",

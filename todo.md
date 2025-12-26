@@ -69,4 +69,40 @@
 
 ### Testing & Deployment
 - [x] Test sentiment analysis accuracy
-- [ ] Save checkpoint with sentiment analysis feature
+- [x] Save checkpoint with sentiment analysis feature
+
+## Sentiment-Based Recommendation Engine (Current)
+
+### Backend Sentiment Scoring
+- [x] Create sentiment scoring service for stocks
+- [x] Implement historical sentiment aggregation (7-day, 30-day averages)
+- [x] Calculate sentiment momentum (improving vs declining sentiment)
+- [x] Add sentiment score to stock recommendation algorithm
+- [x] Weight stocks with positive sentiment higher in portfolios
+
+### Portfolio Generation Updates
+- [x] Update Conservative portfolio to favor stable positive sentiment
+- [x] Update Moderate portfolio to balance sentiment with fundamentals
+- [x] Update Aggressive portfolio to capture sentiment momentum
+- [x] Add sentiment score field to stock data
+- [x] Recalculate portfolio allocations with sentiment weighting
+
+### Rebalancing Recommendations
+- [x] Create sentiment-based rebalancing engine
+- [x] Identify stocks with declining sentiment for reduction
+- [x] Identify stocks with improving sentiment for increase
+- [x] Generate rebalancing alerts and recommendations
+- [ ] Add rebalancing UI to portfolio dashboard
+
+### UI Updates
+- [x] Add sentiment score badges to stock cards
+- [x] Create sentiment trend indicators (↑↓→)
+- [x] Add sentiment impact explanation to recommendations
+- [x] Show sentiment-adjusted expected returns
+- [x] Add sentiment filter to stock comparison tool
+
+### Testing & Deployment
+- [x] Test sentiment scoring accuracy
+- [x] Test portfolio generation with sentiment weights
+- [x] Test rebalancing recommendations
+- [ ] Save checkpoint with sentiment-based recommendations

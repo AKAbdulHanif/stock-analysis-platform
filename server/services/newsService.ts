@@ -7,7 +7,7 @@
 
 import { analyzeArticleSentiment } from './sentimentService';
 
-interface NewsArticle {
+export interface NewsArticle {
   title: string;
   summary: string;
   url: string;
