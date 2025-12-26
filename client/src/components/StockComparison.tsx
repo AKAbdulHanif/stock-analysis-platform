@@ -10,6 +10,7 @@ import WatchlistManager from "./WatchlistManager";
 import PriceAlertManager from "./PriceAlertManager";
 import TradeEntryForm from "./TradeEntryForm";
 import TradeHistory from "./TradeHistory";
+import PriceChartModal from "./PriceChartModal";
 
 interface Stock {
   ticker: string;
@@ -465,6 +466,7 @@ export default function StockComparison() {
                 {/* Price Alert Manager & Trade Entry */}
                 <div className="mt-4 pt-4 border-t border-slate-700 space-y-3">
                   <PriceAlertManager ticker={stock.ticker} currentPrice={stock.price} />
+                  <PriceChartModal ticker={stock.ticker} currentPrice={stock.price} />
                   <div className="grid grid-cols-2 gap-2">
                     <TradeEntryForm stockTicker={stock.ticker} currentPrice={stock.price} />
                     <TradeHistory stockTicker={stock.ticker} onlyActive={true} />
