@@ -3,111 +3,12 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useState } from "react";
+import StockComparison from "@/components/StockComparison";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("overview");
 
-  const stocks = [
-    {
-      ticker: "TSM",
-      name: "Taiwan Semiconductor",
-      sector: "Semiconductors",
-      price: 298,
-      target: "320-360",
-      upside: "7-21%",
-      thesis: "Foundry leader, 2nm capacity sold out, earnings growth likely to exceed 20%",
-      pe: 20.66,
-      growth: "+20%"
-    },
-    {
-      ticker: "NVDA",
-      name: "NVIDIA",
-      sector: "Semiconductors",
-      price: 188,
-      target: "220-280",
-      upside: "17-49%",
-      thesis: "AI chip leader, $275B backlog, China market opening, 63% revenue growth",
-      pe: 32,
-      growth: "+63%"
-    },
-    {
-      ticker: "AVGO",
-      name: "Broadcom",
-      sector: "Semiconductors",
-      price: 340,
-      target: "380-450",
-      upside: "12-32%",
-      thesis: "$73B AI backlog, 47% revenue growth, networking exposure",
-      pe: 28,
-      growth: "+47%"
-    },
-    {
-      ticker: "ASML",
-      name: "ASML",
-      sector: "Semiconductors",
-      price: 1065,
-      target: "1150-1350",
-      upside: "8-27%",
-      thesis: "Equipment supplier to TSMC, beneficiary of chip capex cycle",
-      pe: 35.95,
-      growth: "+5%"
-    },
-    {
-      ticker: "UNH",
-      name: "UnitedHealth",
-      sector: "Healthcare",
-      price: 220,
-      target: "280-350",
-      upside: "27-59%",
-      thesis: "Margin recovery, 35% decline priced in negatives, sector rotation",
-      pe: 18,
-      growth: "+15%"
-    },
-    {
-      ticker: "JNJ",
-      name: "Johnson & Johnson",
-      sector: "Healthcare",
-      price: 1071,
-      target: "1150-1350",
-      upside: "7-26%",
-      thesis: "GLP-1 growth, aging population, dividend aristocrat",
-      pe: 19.8,
-      growth: "+18%"
-    },
-    {
-      ticker: "ISRG",
-      name: "Intuitive Surgical",
-      sector: "Healthcare",
-      price: 577,
-      target: "600-700",
-      upside: "4-21%",
-      thesis: "Robotic surgery leader, secular growth, AI integration",
-      pe: 73.9,
-      growth: "+25%"
-    },
-    {
-      ticker: "JPM",
-      name: "JPMorgan",
-      sector: "Financials",
-      price: 317,
-      target: "340-380",
-      upside: "7-20%",
-      thesis: "IB recovery, capital markets strength, pristine credit",
-      pe: 12,
-      growth: "+6%"
-    },
-    {
-      ticker: "BAC",
-      name: "Bank of America",
-      sector: "Financials",
-      price: 55,
-      target: "58-68",
-      upside: "5-24%",
-      thesis: "Trading revenue growth, IB recovery, resilient consumer",
-      pe: 10.5,
-      growth: "+5%"
-    }
-  ];
+  // Stock data removed - now in StockComparison component
 
   const sectors = [
     {
@@ -282,51 +183,8 @@ export default function Home() {
           </TabsContent>
 
           {/* Stocks Tab */}
-          <TabsContent value="stocks" className="space-y-4">
-            <div className="grid grid-cols-1 gap-4">
-              {stocks.map((stock) => (
-                <Card key={stock.ticker} className="bg-slate-800 border-slate-700 hover:border-slate-600 transition-colors">
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-lg font-bold text-white">{stock.ticker}</h3>
-                          <span className="px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded">
-                            {stock.sector}
-                          </span>
-                        </div>
-                        <p className="text-slate-400">{stock.name}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-white">${stock.price}</div>
-                        <div className="text-sm text-slate-400">Current Price</div>
-                      </div>
-                    </div>
-
-                    <p className="text-slate-300 text-sm mb-4">{stock.thesis}</p>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                      <div className="bg-slate-700/50 p-3 rounded">
-                        <div className="text-xs text-slate-400 mb-1">Target</div>
-                        <div className="text-sm font-semibold text-white">${stock.target}</div>
-                      </div>
-                      <div className="bg-slate-700/50 p-3 rounded">
-                        <div className="text-xs text-slate-400 mb-1">Upside</div>
-                        <div className="text-sm font-semibold text-emerald-400">{stock.upside}</div>
-                      </div>
-                      <div className="bg-slate-700/50 p-3 rounded">
-                        <div className="text-xs text-slate-400 mb-1">P/E Ratio</div>
-                        <div className="text-sm font-semibold text-white">{stock.pe}x</div>
-                      </div>
-                      <div className="bg-slate-700/50 p-3 rounded">
-                        <div className="text-xs text-slate-400 mb-1">Growth</div>
-                        <div className="text-sm font-semibold text-blue-400">{stock.growth}</div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
+          <TabsContent value="stocks" className="space-y-6">
+            <StockComparison />
           </TabsContent>
 
           {/* Metals Tab */}
