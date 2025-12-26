@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Plus, Trash2, TrendingUp, TrendingDown } from "lucide-react";
+import { Plus, Trash2, TrendingUp, TrendingDown, ChevronDown, ChevronUp } from "lucide-react";
+import SentimentTrendChart from "@/components/SentimentTrendChart";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -41,6 +42,7 @@ export default function Watchlists() {
   const [newWatchlistName, setNewWatchlistName] = useState("");
   const [newWatchlistDescription, setNewWatchlistDescription] = useState("");
   const [newStockTicker, setNewStockTicker] = useState("");
+  const [expandedStock, setExpandedStock] = useState<string | null>(null);
 
   // Mock user ID for development
   const userId = 1;
@@ -458,48 +460,66 @@ export default function Watchlists() {
                     <div className="space-y-2">
                       {watchlistStocks.map((stock) => {
                         const quote = stockQuotes[stock.ticker];
+                        const isExpanded = expandedStock === stock.ticker;
                         return (
-                          <div
-                            key={stock.id}
-                            className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
-                          >
-                            <div className="flex-1">
-                              <div className="flex items-center gap-3">
-                                <h3 className="font-semibold text-lg">{stock.ticker}</h3>
-                                {quote && (
-                                  <>
-                                    <span className="text-2xl font-bold">
-                                      ${quote.price.toFixed(2)}
-                                    </span>
-                                    <div
-                                      className={`flex items-center gap-1 ${
-                                        quote.change >= 0 ? "text-green-600" : "text-red-600"
-                                      }`}
-                                    >
-                                      {quote.change >= 0 ? (
-                                        <TrendingUp className="h-4 w-4" />
-                                      ) : (
-                                        <TrendingDown className="h-4 w-4" />
-                                      )}
-                                      <span className="font-medium">
-                                        {quote.change >= 0 ? "+" : ""}
-                                        {quote.change.toFixed(2)} ({quote.changePercent.toFixed(2)}%)
+                          <div key={stock.id} className="rounded-lg border bg-card">
+                            <div
+                              className="flex items-center justify-between p-4 hover:bg-accent/50 transition-colors cursor-pointer"
+                              onClick={() => setExpandedStock(isExpanded ? null : stock.ticker)}
+                            >
+                              <div className="flex-1">
+                                <div className="flex items-center gap-3">
+                                  <h3 className="font-semibold text-lg">{stock.ticker}</h3>
+                                  {quote && (
+                                    <>
+                                      <span className="text-2xl font-bold">
+                                        ${quote.price.toFixed(2)}
                                       </span>
-                                    </div>
-                                  </>
+                                      <div
+                                        className={`flex items-center gap-1 ${
+                                          quote.change >= 0 ? "text-green-600" : "text-red-600"
+                                        }`}
+                                      >
+                                        {quote.change >= 0 ? (
+                                          <TrendingUp className="h-4 w-4" />
+                                        ) : (
+                                          <TrendingDown className="h-4 w-4" />
+                                        )}
+                                        <span className="font-medium">
+                                          {quote.change >= 0 ? "+" : ""}
+                                          {quote.change.toFixed(2)} ({quote.changePercent.toFixed(2)}%)
+                                        </span>
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                                <p className="text-sm text-muted-foreground mt-1">
+                                  Added {new Date(stock.addedAt).toLocaleDateString()}
+                                </p>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    removeStock(stock.ticker);
+                                  }}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                                {isExpanded ? (
+                                  <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                                ) : (
+                                  <ChevronDown className="h-5 w-5 text-muted-foreground" />
                                 )}
                               </div>
-                              <p className="text-sm text-muted-foreground mt-1">
-                                Added {new Date(stock.addedAt).toLocaleDateString()}
-                              </p>
                             </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeStock(stock.ticker)}
-                            >
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
+                            {isExpanded && (
+                              <div className="p-4 border-t">
+                                <SentimentTrendChart ticker={stock.ticker} />
+                              </div>
+                            )}
                           </div>
                         );
                       })}

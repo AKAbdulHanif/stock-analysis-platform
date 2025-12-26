@@ -191,3 +191,31 @@
 - [ ] Add sentiment trend indicators (improving/declining)
 - [ ] Integrate charts into stock detail pages
 - [ ] Test historical data collection and visualization
+
+## Alerts Dashboard & Sentiment Charts
+
+### Alerts Dashboard UI
+- [x] Create Alerts page component with notification center
+- [x] Build notification list with read/unread status
+- [x] Add alert creation dialog
+- [x] Build alert management interface (activate/deactivate/delete)
+- [x] Add alert type selection (price above/below, sentiment positive/negative)
+- [x] Integrate with alerts backend API
+- [x] Add navigation from Home page
+
+### Sentiment Trend Charts
+- [x] Install and configure Recharts library
+- [x] Create SentimentTrendChart component
+- [x] Add 30/60/90 day period selector
+- [x] Display sentiment score over time with area chart
+- [x] Add trend indicators (improving/declining/stable)
+- [x] Show confidence bands and article count
+- [x] Integrate with sentiment history API
+- [x] Add to watchlist stock detail view (expandable cards)
+
+### Testing & Deployment
+- [x] Test alerts dashboard functionality
+- [x] Test sentiment chart data visualization
+- [x] Verify API integration
+- [ ] Create final checkpoint
+- [ ] Deploy to production via Publish button
