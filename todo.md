@@ -105,4 +105,4 @@
 - [x] Test sentiment scoring accuracy
 - [x] Test portfolio generation with sentiment weights
 - [x] Test rebalancing recommendations
-- [ ] Save checkpoint with sentiment-based recommendations
+- [x] Save checkpoint with sentiment-based recommendations
