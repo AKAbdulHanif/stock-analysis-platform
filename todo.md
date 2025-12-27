@@ -855,3 +855,31 @@
 - [ ] Add cache prefetching for watchlists
 - [ ] Monitor cache hit rates
 - [ ] Document caching strategy
+
+## Test Coverage Expansion (Target: 100%)
+- [ ] Fix 10 failing tests (watchlist and alert service issues)
+- [x] Add unit tests for optionsStrategyService.ts (Black-Scholes, Greeks)
+- [x] Add unit tests for technicalIndicatorsService.ts (RSI, MACD, Bollinger Bands)
+- [x] Add unit tests for stockScreenerService.ts (filters, preset screens)
+- [x] Add unit tests for insiderTradingService.ts (SEC Form 4 parsing)
+- [x] Add unit tests for economicCalendarService.ts (earnings, dividends)
+- [x] Add unit tests for candlestickPatternService.ts (pattern recognition)
+- [x] Add unit tests for portfolioRiskMetricsService.ts (Sharpe, beta, VaR)
+- [x] Add unit tests for sectorRotationService.ts (relative strength)
+- [ ] Add unit tests for backtestingService.ts (historical simulation)
+- [x] Add unit tests for monteCarloService.ts (probabilistic forecasting)
+- [ ] Add unit tests for taxLossHarvestingService.ts (loss analysis)
+- [x] Add unit tests for stockComparisonService.ts (correlation matrix)
+- [ ] Run full test suite and verify 100% pass rate
+
+## Stock Universe Expansion (S&P 500 + ETFs)
+- [x] Research and compile S&P 500 stock list with sectors (503 stocks)
+- [x] Research and compile top 50 ETFs (sector, bond, commodity, international)
+- [x] Create shared/stockUniverse.ts with comprehensive stock/ETF data
+- [ ] Add stock search functionality with autocomplete
+- [ ] Update stock screener to support S&P 500 universe
+- [ ] Update watchlist UI to support stock search and browsing
+- [ ] Add sector-based stock browsing (11 sectors)
+- [ ] Add ETF category browsing (equity, bond, commodity, international)
+- [ ] Test stock detail pages with new stocks (sample 10-20 stocks)
+- [ ] Test all features with expanded universe
