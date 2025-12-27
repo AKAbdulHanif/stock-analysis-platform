@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight, Star, Bell } from "lucide-react";
+import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight, Star, Bell, GitCompare } from "lucide-react";
 import { Link } from "wouter";
 import { useState } from "react";
 import StockComparison from "@/components/StockComparison";
@@ -77,6 +77,12 @@ export default function Home() {
               <p className="text-slate-400">Deep Research & Stock Recommendations</p>
             </div>
             <div className="flex items-center gap-4">
+              <Link href="/compare">
+                <Button variant="outline" className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
+                  <GitCompare className="mr-2 h-4 w-4" />
+                  Compare Stocks
+                </Button>
+              </Link>
               <Link href="/watchlists">
                 <Button variant="outline" className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
                   <Star className="mr-2 h-4 w-4" />

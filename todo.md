@@ -346,3 +346,65 @@
 - [x] Restart server to resolve database column caching issue
 - [x] Verify all alerts load correctly after restart
 - [ ] Create final checkpoint
+
+## Stock Comparison Tool (In Progress)
+
+### Backend API
+- [ ] Create comparison API endpoint (POST /api/stock/compare)
+- [ ] Accept multiple tickers in request body
+- [ ] Fetch quotes, charts, sentiment, and news for all tickers
+- [ ] Calculate comparison metrics (relative performance, volatility, correlation)
+- [ ] Return normalized data for side-by-side comparison
+- [ ] Add caching strategy for comparison data
+
+### Frontend UI
+- [ ] Create StockComparison page component
+- [ ] Add multi-select ticker input (up to 5 stocks)
+- [ ] Build synchronized price charts with overlay view
+- [ ] Create comparison table with key metrics (price, change, P/E, market cap, volume)
+- [ ] Add sentiment score comparison with visual indicators
+- [ ] Display relative performance chart (% change from baseline)
+- [ ] Add correlation matrix heatmap
+- [ ] Create export functionality (CSV, PDF)
+- [ ] Add navigation from watchlists and home page
+
+### Testing
+- [ ] Test comparison with 2-5 stocks
+- [ ] Verify chart synchronization
+- [ ] Test with stocks from different sectors
+- [ ] Validate comparison metrics calculations
+- [ ] Create checkpoint
+
+## Portfolio Rebalancing Engine (In Progress)
+
+### Backend Rebalancing Service
+- [ ] Create rebalancing calculation service
+- [ ] Fetch current portfolio allocations from database
+- [ ] Calculate target allocations based on portfolio strategy
+- [ ] Compare current vs target allocations (drift analysis)
+- [ ] Integrate sentiment scores into rebalancing logic
+- [ ] Generate buy/sell recommendations to reach targets
+- [ ] Calculate trade sizes and dollar amounts
+- [ ] Add rebalancing threshold (e.g., only rebalance if drift >5%)
+- [ ] Create API endpoint (GET /api/portfolio/rebalancing/:portfolioType)
+
+### Frontend Rebalancing UI
+- [ ] Create PortfolioRebalancing component
+- [ ] Display current vs target allocation comparison
+- [ ] Show allocation drift visualization (bar chart)
+- [ ] Build buy/sell recommendations table
+- [ ] Add trade size calculator
+- [ ] Display expected portfolio after rebalancing
+- [ ] Add sentiment impact explanation
+- [ ] Create "Apply Rebalancing" simulation
+- [ ] Add rebalancing history tracking
+- [ ] Integrate into portfolio dashboard
+
+### Testing & Deployment
+- [ ] Test rebalancing calculations with Conservative portfolio
+- [ ] Test rebalancing with Moderate portfolio
+- [ ] Test rebalancing with Aggressive portfolio
+- [ ] Verify sentiment-based adjustments
+- [ ] Test trade size calculations
+- [ ] Create final checkpoint
+- [ ] Deploy to production via Manus Publish button
