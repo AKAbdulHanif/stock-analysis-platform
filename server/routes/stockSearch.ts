@@ -11,12 +11,26 @@ router.get('/stock-search', async (req, res) => {
   try {
     const query = req.query.q as string;
     const limit = parseInt(req.query.limit as string) || 10;
+    const sectors = req.query.sectors ? (req.query.sectors as string).split(',') : undefined;
 
     if (!query || query.length < 1) {
       return res.json([]);
     }
 
-    const results = searchSecurities(query, limit);
+    let results = searchSecurities(query, limit * 3); // Get more results for filtering
+
+    // Apply sector filter
+    if (sectors && sectors.length > 0) {
+      results = results.filter(s => sectors.includes(s.sector));
+    }
+
+    // Note: Market cap, P/E ratio, and dividend yield filtering would require
+    // real-time stock data. For now, we support sector filtering.
+    // In production, you would fetch stock quotes and filter based on these metrics.
+
+    // Limit results
+    results = results.slice(0, limit);
+
     res.json(results);
   } catch (error) {
     console.error('Stock search error:', error);

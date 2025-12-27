@@ -912,3 +912,30 @@
 - [x] Style sector cards and stock lists
 - [x] Add route for /sectors
 - [ ] Test sector browsing functionality
+
+## Sector Performance Metrics Enhancement
+- [x] Create API endpoint for sector performance data (YTD return, volatility)
+- [x] Calculate top gainers/losers for each sector
+- [x] Add performance metrics to sector cards on /sectors page
+- [x] Display real-time sector rotation indicators
+- [x] Add visual indicators (color coding) for sector performance)
+- [x] Cache sector performance data for efficiency
+
+## Watchlist Integration
+- [x] Add "Add to Watchlist" button in StockSearch dropdown results
+- [x] Add "Add to Watchlist" button on sector stock cards
+- [x] Create quick-add watchlist modal/toast feedback
+- [x] Handle authentication state for watchlist actions
+- [ ] Update UI to show which stocks are already in watchlists
+- [ ] Add bulk watchlist operations for sector stocks
+
+## Advanced Search Filters
+- [x] Create AdvancedSearchFilters component
+- [x] Add market cap filter (Small/Mid/Large cap)
+- [x] Add P/E ratio range filter
+- [x] Add dividend yield filter
+- [x] Add sector multi-select filter
+- [x] Implement filter logic in search API endpoint (sector filtering)
+- [x] Add "Clear Filters" functionality
+- [ ] Persist filter state in URL params
+- [x] Add filter badges showing active filters

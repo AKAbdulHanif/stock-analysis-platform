@@ -3,6 +3,8 @@ import { Search, TrendingUp } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { Input } from './ui/input';
 import { cn } from '@/lib/utils';
+import { QuickAddToWatchlist } from './QuickAddToWatchlist';
+import { AdvancedSearchFilters, SearchFilters } from './AdvancedSearchFilters';
 
 interface Security {
   ticker: string;
@@ -17,6 +19,7 @@ export function StockSearch() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const searchRef = useRef<HTMLDivElement>(null);
   const [, setLocation] = useLocation();
+  const [filters, setFilters] = useState<SearchFilters>({ marketCap: 'all', sectors: [] });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,7 +41,25 @@ export function StockSearch() {
       }
 
       try {
-        const response = await fetch(`/api/stock-search?q=${encodeURIComponent(query)}&limit=8`);
+        // Build query params with filters
+        const params = new URLSearchParams({ q: query, limit: '8' });
+        if (filters.marketCap && filters.marketCap !== 'all') {
+          params.append('marketCap', filters.marketCap);
+        }
+        if (filters.peRatioMin !== undefined) {
+          params.append('peMin', filters.peRatioMin.toString());
+        }
+        if (filters.peRatioMax !== undefined) {
+          params.append('peMax', filters.peRatioMax.toString());
+        }
+        if (filters.dividendYieldMin !== undefined && filters.dividendYieldMin > 0) {
+          params.append('divYield', filters.dividendYieldMin.toString());
+        }
+        if (filters.sectors && filters.sectors.length > 0) {
+          params.append('sectors', filters.sectors.join(','));
+        }
+
+        const response = await fetch(`/api/stock-search?${params}`);
         const data = await response.json();
         setResults(data);
         setIsOpen(data.length > 0);
@@ -51,7 +72,7 @@ export function StockSearch() {
 
     const debounce = setTimeout(searchStocks, 200);
     return () => clearTimeout(debounce);
-  }, [query]);
+  }, [query, filters]);
 
   const handleSelect = (ticker: string) => {
     setLocation(`/stock/${ticker}`);
@@ -86,36 +107,41 @@ export function StockSearch() {
   };
 
   return (
-    <div ref={searchRef} className="relative w-full max-w-md">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="text"
-          placeholder="Search stocks & ETFs..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          onFocus={() => query && results.length > 0 && setIsOpen(true)}
-          className="pl-9 bg-background/50 backdrop-blur-sm border-border/50"
-        />
+    <div ref={searchRef} className="relative w-full max-w-2xl">
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search stocks & ETFs..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onFocus={() => query && results.length > 0 && setIsOpen(true)}
+            className="pl-9 bg-background/50 backdrop-blur-sm border-border/50"
+          />
+        </div>
+        <AdvancedSearchFilters filters={filters} onFiltersChange={setFilters} />
       </div>
 
       {isOpen && results.length > 0 && (
         <div className="absolute top-full mt-2 w-full bg-card border border-border rounded-lg shadow-lg overflow-hidden z-50">
           <div className="max-h-[400px] overflow-y-auto">
             {results.map((security, index) => (
-              <button
+              <div
                 key={security.ticker}
-                onClick={() => handleSelect(security.ticker)}
                 className={cn(
-                  "w-full px-4 py-3 flex items-start gap-3 hover:bg-accent/50 transition-colors text-left",
+                  "w-full px-4 py-3 flex items-start gap-3 hover:bg-accent/50 transition-colors",
                   selectedIndex === index && "bg-accent/50"
                 )}
               >
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                   <TrendingUp className="h-5 w-5 text-primary" />
                 </div>
-                <div className="flex-1 min-w-0">
+                <button
+                  onClick={() => handleSelect(security.ticker)}
+                  className="flex-1 min-w-0 text-left"
+                >
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-foreground">{security.ticker}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
@@ -124,8 +150,9 @@ export function StockSearch() {
                   </div>
                   <p className="text-sm text-muted-foreground truncate">{security.name}</p>
                   <p className="text-xs text-muted-foreground/70 mt-0.5">{security.sector}</p>
-                </div>
-              </button>
+                </button>
+                <QuickAddToWatchlist ticker={security.ticker} name={security.name} variant="icon" size="sm" />
+              </div>
             ))}
           </div>
         </div>
