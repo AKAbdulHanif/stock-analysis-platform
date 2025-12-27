@@ -1,35 +1,60 @@
-import { describe, it, expect } from 'vitest';
-import { runMonteCarloSimulation, type SimulationParams } from './monteCarloService';
+import { describe, it, expect, vi } from 'vitest';
+import { runMonteCarloSimulation } from './monteCarloService';
+
+// Mock the dataApi and chartService
+vi.mock('../_core/dataApi', () => ({
+  callDataApi: vi.fn().mockResolvedValue({
+    chart: {
+      result: [{
+        timestamp: Array.from({length: 500}, (_, i) => Date.now()/1000 - i*86400),
+        indicators: {
+          quote: [{
+            close: Array.from({length: 500}, () => 100 + Math.random() * 20)
+          }]
+        }
+      }]
+    }
+  })
+}));
+
+vi.mock('./chartService', () => ({
+  getChartData: vi.fn().mockResolvedValue({
+    dataPoints: Array.from({length: 500}, (_, i) => ({
+      date: new Date(Date.now() - i*86400000).toISOString(),
+      close: 100 + Math.random() * 20
+    }))
+  })
+}));
 
 describe('monteCarloService', () => {
-  it('should run Monte Carlo simulation', () => {
-    const params: SimulationParams = {
-      initialValue: 100000,
-      expectedReturn: 0.08,
-      volatility: 0.15,
-      years: 10,
-      simulations: 1000,
+  it('should run Monte Carlo simulation with correct config', async () => {
+    const config = {
+      tickers: ['AAPL'],
+      allocations: [1.0],
+      timeHorizonYears: 5,
+      simulationsCount: 100,
+      initialCapital: 100000,
     };
     
-    const results = runMonteCarloSimulation(params);
+    const results = await runMonteCarloSimulation(config);
     
     expect(results).toBeDefined();
-    expect(results.simulations).toBe(1000);
+    expect(results.finalValues).toBeDefined();
     expect(results.percentiles).toBeDefined();
-    expect(results.mean).toBeGreaterThan(0);
+    expect(results.probabilities).toBeDefined();
   });
 
-  it('should handle different simulation counts', () => {
-    const params: SimulationParams = {
-      initialValue: 50000,
-      expectedReturn: 0.07,
-      volatility: 0.12,
-      years: 5,
-      simulations: 500,
+  it('should handle multiple tickers', async () => {
+    const config = {
+      tickers: ['AAPL', 'GOOGL'],
+      allocations: [0.6, 0.4],
+      timeHorizonYears: 3,
+      simulationsCount: 50,
+      initialCapital: 50000,
     };
     
-    const results = runMonteCarloSimulation(params);
+    const results = await runMonteCarloSimulation(config);
     
-    expect(results.simulations).toBe(500);
+    expect(results.finalValues.mean).toBeGreaterThan(0);
   });
 });

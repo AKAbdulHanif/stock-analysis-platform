@@ -12,6 +12,7 @@ import PortfolioDashboard from "@/components/PortfolioDashboard";
 import RiskBasedPortfolios from "@/components/RiskBasedPortfolios";
 import SentimentPortfolioView from "@/components/SentimentPortfolioView";
 import { SentimentDistributionChart } from "@/components/SentimentDistributionChart";
+import { StockSearch } from "@/components/StockSearch";
 
 export default function Home() {
   // The userAuth hooks provides authentication state
@@ -77,6 +78,13 @@ export default function Home() {
               <p className="text-slate-400">Deep Research & Stock Recommendations</p>
             </div>
             <div className="flex items-center gap-4">
+              <StockSearch />
+          <Link href="/sectors">
+            <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
+              <Grid3x3 className="mr-2 h-4 w-4" />
+              Sectors
+            </Button>
+          </Link>
           <Link href="/compare">
             <Button variant="outline" className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10">
               <TrendingUp className="mr-2 h-4 w-4" />
