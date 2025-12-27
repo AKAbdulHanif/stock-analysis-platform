@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight, Star, Bell, GitCompare, Activity } from "lucide-react";
+import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight, Star, Bell, GitCompare, Activity, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 import { useState } from "react";
 import StockComparison from "@/components/StockComparison";
@@ -87,6 +87,12 @@ export default function Home() {
             <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
               <Activity className="mr-2 h-4 w-4" />
               Backtest Strategy
+            </Button>
+          </Link>
+          <Link href="/monte-carlo">
+            <Button variant="outline" className="border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/10">
+              <Sparkles className="mr-2 h-4 w-4" />
+              Monte Carlo
             </Button>
           </Link>
               <Link href="/watchlists">

@@ -468,3 +468,81 @@
 - [ ] Test benchmark comparison
 - [ ] Create final checkpoint
 - [ ] Deploy to production via Manus Publish button
+
+## Monte Carlo Simulation Tool (In Progress)
+
+### Backend Monte Carlo Engine
+- [ ] Create Monte Carlo simulation service (monteCarloService.ts)
+- [ ] Implement historical returns and volatility calculation
+- [ ] Build random return generator using normal distribution
+- [ ] Implement portfolio simulation with thousands of paths (e.g., 10,000 simulations)
+- [ ] Calculate confidence intervals (10th, 25th, 50th, 75th, 90th percentiles)
+- [ ] Project portfolio value over multiple time horizons (1Y, 3Y, 5Y, 10Y)
+- [ ] Calculate probability of reaching target goals
+- [ ] Calculate probability of loss scenarios
+- [ ] Handle correlation between assets in simulation
+
+### Monte Carlo API Endpoints
+- [ ] Create POST /api/monte-carlo endpoint
+- [ ] Accept simulation configuration (tickers, allocations, time horizon, simulations count, initial capital)
+- [ ] Return simulation results (percentile paths, confidence intervals, probabilities)
+- [ ] Add caching for historical statistics
+- [ ] Add error handling for insufficient historical data
+
+### Frontend Monte Carlo UI
+- [ ] Create MonteCarloSimulation page component
+- [ ] Add simulation configuration form (portfolio, time horizon, simulations count)
+- [ ] Build fan chart showing confidence intervals (10-90%, 25-75%, median)
+- [ ] Display probability distribution histogram for final values
+- [ ] Show success probability cards (% chance of positive return, % chance of 2x, etc.)
+- [ ] Add worst-case/best-case scenario cards
+- [ ] Create expected value and risk metrics display
+- [ ] Add route to App.tsx (/monte-carlo)
+- [ ] Add navigation from Home page
+
+### Testing & Deployment
+- [ ] Test Monte Carlo with sample portfolio (AAPL, NVDA, TSM)
+- [ ] Verify simulation randomness and distribution
+- [ ] Verify confidence intervals calculate correctly
+- [ ] Test with different time horizons (1Y, 3Y, 5Y, 10Y)
+- [ ] Verify probability calculations
+- [ ] Create final checkpoint
+
+## Tax-Loss Harvesting Tool (In Progress)
+
+### Backend Tax-Loss Harvesting Engine
+- [ ] Create tax-loss harvesting service (taxLossHarvestingService.ts)
+- [ ] Calculate unrealized gains/losses for portfolio positions
+- [ ] Identify losing positions eligible for tax-loss harvesting
+- [ ] Calculate potential tax savings (short-term vs long-term capital gains rates)
+- [ ] Find replacement securities (same sector, similar characteristics)
+- [ ] Calculate correlation between original and replacement securities
+- [ ] Implement wash sale rule checker (30-day window)
+- [ ] Rank harvesting opportunities by tax savings potential
+
+### Tax-Loss Harvesting API Endpoints
+- [ ] Create POST /api/tax-loss-harvesting endpoint
+- [ ] Accept portfolio positions (ticker, quantity, cost basis, purchase date)
+- [ ] Return harvesting opportunities with tax savings and replacement suggestions
+- [ ] Add validation for position data
+- [ ] Add error handling for missing data
+
+### Frontend Tax-Loss Harvesting UI
+- [ ] Create TaxLossHarvesting page component
+- [ ] Add portfolio position input form (ticker, shares, cost basis, date)
+- [ ] Display harvesting opportunities table (loss amount, tax savings, replacement suggestions)
+- [ ] Show total potential tax savings summary
+- [ ] Add replacement security comparison (correlation, performance, sector)
+- [ ] Create wash sale warning indicators
+- [ ] Add "Execute Harvest" action buttons
+- [ ] Add route to App.tsx (/tax-loss-harvesting)
+- [ ] Add navigation from Home page
+
+### Testing & Deployment
+- [ ] Test with sample portfolio positions (some gains, some losses)
+- [ ] Verify loss calculations
+- [ ] Verify tax savings calculations (assume 20% long-term, 37% short-term rates)
+- [ ] Test replacement security suggestions
+- [ ] Verify wash sale rule checking
+- [ ] Create final checkpoint
+- [ ] Deploy to production via Manus Publish button
