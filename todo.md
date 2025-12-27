@@ -546,3 +546,69 @@
 - [ ] Verify wash sale rule checking
 - [ ] Create final checkpoint
 - [ ] Deploy to production via Manus Publish button
+
+## Tax-Loss Harvesting Tool (In Progress)
+
+### Backend Tax-Loss Analysis Engine
+- [ ] Create tax-loss harvesting service (taxLossHarvestingService.ts)
+- [ ] Implement portfolio loss identification (stocks below purchase price)
+- [ ] Calculate tax savings potential (short-term vs long-term capital gains)
+- [ ] Find replacement security suggestions (same sector, similar fundamentals)
+- [ ] Calculate correlation between losing position and replacements
+- [ ] Implement wash sale rule checker (30-day window)
+- [ ] Calculate portfolio allocation impact after harvesting
+- [ ] Create tax-loss harvesting API endpoint (POST /api/tax-loss-harvesting)
+
+### Frontend Tax-Loss Harvesting UI
+- [ ] Create TaxLossHarvesting page component
+- [ ] Add portfolio holdings input (ticker, shares, purchase price, purchase date)
+- [ ] Display losing positions table (current loss, tax savings, holding period)
+- [ ] Show replacement security suggestions for each losing position
+- [ ] Add correlation score and similarity metrics
+- [ ] Display wash sale warnings
+- [ ] Calculate total tax savings potential
+- [ ] Add "Execute Harvest" action buttons
+- [ ] Add route to App.tsx (/tax-loss-harvesting)
+- [ ] Add navigation button from Home page
+
+### Testing & Deployment
+- [ ] Test with sample portfolio with losses
+- [ ] Verify tax savings calculations (short-term 37%, long-term 20%)
+- [ ] Verify replacement suggestions accuracy
+- [ ] Test wash sale rule checker
+- [ ] Create final checkpoint
+
+## Options Strategy Analyzer (In Progress)
+
+### Backend Options Pricing Engine
+- [ ] Create options strategy service (optionsStrategyService.ts)
+- [ ] Implement Black-Scholes model for option pricing
+- [ ] Calculate Greeks (Delta, Gamma, Theta, Vega, Rho)
+- [ ] Implement covered call strategy calculator
+- [ ] Implement protective put strategy calculator
+- [ ] Calculate break-even points for each strategy
+- [ ] Calculate max profit and max loss scenarios
+- [ ] Calculate probability of profit
+- [ ] Create options strategy API endpoint (POST /api/options/strategy)
+
+### Frontend Options Strategy UI
+- [ ] Create OptionsAnalyzer page component
+- [ ] Add stock selection and current price input
+- [ ] Add strategy selector (covered call, protective put, collar, straddle)
+- [ ] Add strike price and expiration date inputs
+- [ ] Display option premium (bid/ask)
+- [ ] Show Greeks table (Delta, Gamma, Theta, Vega)
+- [ ] Build profit/loss diagram (payoff chart)
+- [ ] Display break-even analysis
+- [ ] Show max profit, max loss, and probability of profit
+- [ ] Add strategy comparison view
+- [ ] Add route to App.tsx (/options)
+- [ ] Add navigation button from Home page
+
+### Testing & Deployment
+- [ ] Test covered call strategy with AAPL
+- [ ] Test protective put strategy with NVDA
+- [ ] Verify Black-Scholes pricing accuracy
+- [ ] Verify Greeks calculations
+- [ ] Test profit/loss diagrams
+- [ ] Create final checkpoint
