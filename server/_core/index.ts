@@ -27,6 +27,8 @@ import stockScreenerApiRouter from '../routes/stockScreenerApi';
 import riskMetricsApiRouter from '../routes/riskMetricsApi';
 import sectorRotationApiRouter from '../routes/sectorRotationApi';
 import insiderTradingApiRouter from '../routes/insiderTradingApi';
+import { apiLimiter, stockDataLimiter } from './rateLimiter';
+import { securityHeaders, sanitizeInput, requestLogger } from './security';
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -50,9 +52,21 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
+  
+  // Security middleware
+  app.use(securityHeaders);
+  app.use(requestLogger);
+  app.use(sanitizeInput);
+  
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  
+  // Rate limiting
+  app.use("/api", apiLimiter);
+  app.use("/api/stock-quote", stockDataLimiter);
+  app.use("/api/stock-quotes", stockDataLimiter);
+  app.use("/api/stock-chart", stockDataLimiter);
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
   // Stock API routes
