@@ -19,6 +19,7 @@ import stockComparisonApiRouter from "../routes/stockComparisonApi";
 import backtestingApiRouter from '../routes/backtestingApi';
 import monteCarloApiRouter from '../routes/monteCarloApi';
 import taxLossHarvestingApiRouter from '../routes/taxLossHarvestingApi';
+import optionsStrategyApiRouter from '../routes/optionsStrategyApi';
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -71,6 +72,8 @@ async function startServer() {
   app.use("/api/monte-carlo", monteCarloApiRouter);
   // Tax-Loss Harvesting API routes
   app.use("/api/tax-loss-harvesting", taxLossHarvestingApiRouter);
+  // Options Strategy API routes
+  app.use("/api/options", optionsStrategyApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",
