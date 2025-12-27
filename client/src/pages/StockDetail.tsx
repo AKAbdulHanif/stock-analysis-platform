@@ -8,6 +8,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import SentimentTrendChart from "@/components/SentimentTrendChart";
 import { StockNews } from "@/components/StockNews";
 import TechnicalIndicators from "@/components/TechnicalIndicators";
+import CandlestickChart from "@/components/CandlestickChart";
 import { toast } from "sonner";
 
 interface StockQuote {
@@ -36,6 +37,7 @@ export default function StockDetail() {
   const [quote, setQuote] = useState<StockQuote | null>(null);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [period, setPeriod] = useState<"1D" | "5D" | "1M" | "3M" | "6M" | "1Y">("1M");
+  const [chartView, setChartView] = useState<"line" | "candlestick">("line");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -194,8 +196,32 @@ export default function StockDetail() {
         <Card className="bg-slate-800 border-slate-700">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="text-white">Price History</CardTitle>
-              <div className="flex gap-2">
+              <div>
+                <CardTitle className="text-white">Price History</CardTitle>
+                <CardDescription className="text-slate-400 mt-1">
+                  {chartView === 'line' ? 'Line chart view' : 'Candlestick chart with volume'}
+                </CardDescription>
+              </div>
+              <div className="flex gap-3">
+                <div className="flex gap-1 bg-slate-700 p-1 rounded-lg">
+                  <Button
+                    variant={chartView === 'line' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setChartView('line')}
+                    className={chartView === 'line' ? 'bg-blue-600' : 'text-slate-300'}
+                  >
+                    Line
+                  </Button>
+                  <Button
+                    variant={chartView === 'candlestick' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setChartView('candlestick')}
+                    className={chartView === 'candlestick' ? 'bg-blue-600' : 'text-slate-300'}
+                  >
+                    Candles
+                  </Button>
+                </div>
+                <div className="flex gap-2">
                 {(["1D", "5D", "1M", "3M", "6M", "1Y"] as const).map((p) => (
                   <Button
                     key={p}
@@ -207,49 +233,67 @@ export default function StockDetail() {
                     {p}
                   </Button>
                 ))}
+                </div>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={400}>
-              <AreaChart data={chartData}>
-                <defs>
-                  <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis 
-                  dataKey="date" 
-                  stroke="#94a3b8"
-                  tick={{ fill: '#94a3b8' }}
-                />
-                <YAxis 
-                  stroke="#94a3b8"
-                  tick={{ fill: '#94a3b8' }}
-                  domain={['auto', 'auto']}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#1e293b', 
-                    border: '1px solid #475569',
-                    borderRadius: '8px',
-                    color: '#fff'
-                  }}
-                  formatter={(value: number) => [`$${value.toFixed(2)}`, 'Price']}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="price" 
-                  stroke="#3b82f6" 
-                  strokeWidth={2}
-                  fill="url(#colorPrice)" 
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+            {chartView === 'line' ? (
+              <ResponsiveContainer width="100%" height={400}>
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                  <XAxis 
+                    dataKey="date" 
+                    stroke="#94a3b8"
+                    tick={{ fill: '#94a3b8' }}
+                  />
+                  <YAxis 
+                    stroke="#94a3b8"
+                    tick={{ fill: '#94a3b8' }}
+                    domain={['auto', 'auto']}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#1e293b', 
+                      border: '1px solid #475569',
+                      borderRadius: '8px',
+                      color: '#fff'
+                    }}
+                    formatter={(value: number) => [`$${value.toFixed(2)}`, 'Price']}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="price" 
+                    stroke="#3b82f6" 
+                    strokeWidth={2}
+                    fill="url(#colorPrice)" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : null}
           </CardContent>
         </Card>
+
+        {/* Candlestick Chart */}
+        {chartView === 'candlestick' && (
+          <CandlestickChart 
+            ticker={ticker} 
+            initialPeriod={{
+              '1D': '1d',
+              '5D': '5d',
+              '1M': '1mo',
+              '3M': '3mo',
+              '6M': '6mo',
+              '1Y': '1y'
+            }[period] || '1mo'} 
+          />
+        )}
 
         {/* Tabs for different sections */}
         <Tabs defaultValue="sentiment" className="w-full">

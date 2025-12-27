@@ -656,3 +656,31 @@
 - [x] Test Bollinger Bands with volatile stocks
 - [x] Verify signal accuracy with historical data
 - [x] Create final checkpoint
+
+## Candlestick Charts & Pattern Recognition (New Feature)
+
+### Candlestick Chart Component
+- [x] Build custom candlestick renderer with Recharts
+- [x] Create CandlestickChart component with OHLC data
+- [x] Add volume bars overlay below candlestick chart
+- [x] Implement chart zoom and pan controls
+- [x] Add time period selector (1D, 5D, 1M, 3M, 6M, 1Y)
+- [x] Style candlesticks (green for bullish, red for bearish)
+- [x] Add crosshair tooltip showing OHLC values
+
+### Pattern Recognition
+- [x] Build pattern detection service for common patterns
+- [x] Detect bullish patterns (hammer, morning star, engulfing)
+- [x] Detect bearish patterns (shooting star, evening star, dark cloud)
+- [x] Detect continuation patterns (doji, spinning top)
+- [ ] Highlight detected patterns on chart
+- [ ] Add pattern interpretation panel
+- [ ] Show pattern confidence scores
+
+### Integration
+- [x] Add candlestick chart view to stock detail page
+- [x] Add toggle to switch between line and candlestick views
+- [x] Integrate volume overlay with candlestick chart
+- [ ] Add pattern alerts to notification system
+- [x] Test with multiple stocks (AAPL, NVDA, TSLA)
+- [x] Ensure responsive design on mobile devices

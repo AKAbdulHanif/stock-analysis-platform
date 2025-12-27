@@ -1,249 +1,367 @@
-import { useMemo } from "react";
+import { useState, useEffect } from 'react';
 import {
   ComposedChart,
   Bar,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
-  Cell
-} from "recharts";
-import { Card } from "@/components/ui/card";
-import { generateCandleData, generateDailyCandleData, calculateTechnicalIndicators, getPriceStats, type CandleData } from "@/lib/candlestickData";
+  Cell,
+} from 'recharts';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
+interface CandlestickData {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  timestamp: number;
+}
 
 interface CandlestickChartProps {
   ticker: string;
-  basePrice: number;
-  period?: "1h" | "4h" | "1d" | "7d" | "30d";
+  initialPeriod?: string;
 }
 
-interface ChartDataPoint extends CandleData {
-  sma20?: number | null;
-  sma50?: number | null;
-  bollingerUpper?: number | null;
-  bollingerLower?: number | null;
-}
+export default function CandlestickChart({ ticker, initialPeriod = '1mo' }: CandlestickChartProps) {
+  const [data, setData] = useState<CandlestickData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState(initialPeriod);
+  const [error, setError] = useState<string | null>(null);
 
-export default function CandlestickChart({ ticker, basePrice, period = "1h" }: CandlestickChartProps) {
-  const chartData = useMemo(() => {
-    let candles: CandleData[];
+  useEffect(() => {
+    fetchCandlestickData();
+  }, [ticker, period]);
 
-    // Generate candlestick data based on period
-    switch (period) {
-      case "1h":
-        candles = generateCandleData(basePrice, 12, 0.01); // 12 periods * 5 min = 1 hour
-        break;
-      case "4h":
-        candles = generateCandleData(basePrice, 48, 0.015); // 48 periods * 5 min = 4 hours
-        break;
-      case "1d":
-        candles = generateDailyCandleData(basePrice, 1, 0.025);
-        break;
-      case "7d":
-        candles = generateDailyCandleData(basePrice, 7, 0.025);
-        break;
-      case "30d":
-        candles = generateDailyCandleData(basePrice, 30, 0.025);
-        break;
-      default:
-        candles = generateCandleData(basePrice, 48, 0.015);
+  const fetchCandlestickData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Fetch chart data from Yahoo Finance API
+      const response = await fetch(`/api/stock-chart/${ticker}?period=${period}&interval=1d`);
+      if (!response.ok) throw new Error('Failed to fetch chart data');
+      
+      const chartData = await response.json();
+      
+      if (!chartData.dataPoints || chartData.dataPoints.length === 0) {
+        throw new Error('No data available');
+      }
+
+      setData(chartData.dataPoints);
+
+    } catch (err) {
+      console.error('Error fetching candlestick data:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load data');
+    } finally {
+      setLoading(false);
     }
-
-    // Calculate technical indicators
-    const indicators = calculateTechnicalIndicators(candles);
-
-    // Merge candles with indicators
-    return candles.map((candle, i) => ({
-      ...candle,
-      sma20: indicators[i].sma20,
-      sma50: indicators[i].sma50,
-      bollingerUpper: indicators[i].bollingerUpper,
-      bollingerLower: indicators[i].bollingerLower
-    })) as ChartDataPoint[];
-  }, [ticker, basePrice, period]);
-
-  const stats = useMemo(() => getPriceStats(chartData), [chartData]);
-
-  // Custom candlestick shape
-  const CustomCandlestick = (props: any) => {
-    const { x, y, width, xAxis, yAxis, data } = props;
-
-    if (!data || data.length === 0) return null;
-
-    return data.map((entry: ChartDataPoint, index: number) => {
-      const xPos = xAxis.scale(entry.timestamp);
-      const yOpen = yAxis.scale(entry.open);
-      const yClose = yAxis.scale(entry.close);
-      const yHigh = yAxis.scale(entry.high);
-      const yLow = yAxis.scale(entry.low);
-
-      const candleWidth = Math.max(width * 0.6, 2);
-      const isGain = entry.close >= entry.open;
-      const color = isGain ? "#10b981" : "#ef4444"; // Green for gains, red for losses
-
-      return (
-        <g key={`candle-${index}`}>
-          {/* High-Low line (wick) */}
-          <line
-            x1={xPos}
-            y1={yHigh}
-            x2={xPos}
-            y2={yLow}
-            stroke={color}
-            strokeWidth={1}
-          />
-          {/* Open-Close rectangle (body) */}
-          <rect
-            x={xPos - candleWidth / 2}
-            y={Math.min(yOpen, yClose)}
-            width={candleWidth}
-            height={Math.abs(yClose - yOpen) || 1}
-            fill={color}
-            stroke={color}
-            strokeWidth={1}
-          />
-        </g>
-      );
-    });
   };
 
-  return (
-    <div className="space-y-4">
-      {/* Price Statistics */}
-      <div className="grid grid-cols-4 gap-2">
-        <Card className="bg-slate-700 border-slate-600 p-2">
-          <p className="text-slate-400 text-xs mb-1">Open</p>
-          <p className="text-white font-semibold text-sm">${(stats.open || 0).toFixed(2)}</p>
-        </Card>
-        <Card className="bg-slate-700 border-slate-600 p-2">
-          <p className="text-slate-400 text-xs mb-1">High</p>
-          <p className="text-white font-semibold text-sm">${(stats.high || 0).toFixed(2)}</p>
-        </Card>
-        <Card className="bg-slate-700 border-slate-600 p-2">
-          <p className="text-slate-400 text-xs mb-1">Low</p>
-          <p className="text-white font-semibold text-sm">${(stats.low || 0).toFixed(2)}</p>
-        </Card>
-        <Card className={`border-slate-600 p-2 ${(stats.changePercent || 0) >= 0 ? "bg-emerald-600/10" : "bg-red-600/10"}`}>
-          <p className="text-slate-400 text-xs mb-1">Change</p>
-          <p className={`font-semibold text-sm ${(stats.changePercent || 0) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-            {(stats.changePercent || 0) >= 0 ? "+" : ""}{(stats.changePercent || 0).toFixed(2)}%
-          </p>
-        </Card>
-      </div>
+  const CustomCandlestick = (props: any) => {
+    const { x, y, width, height, payload } = props;
+    
+    if (!payload || !payload.open || !payload.close || !payload.high || !payload.low) {
+      return null;
+    }
 
-      {/* Chart */}
-      <Card className="bg-slate-700 border-slate-600 p-4">
+    const { open, close, high, low } = payload;
+    const isBullish = close > open;
+    const color = isBullish ? '#10b981' : '#ef4444'; // green-500 : red-500
+    
+    // Calculate positions
+    const maxPrice = Math.max(open, close, high, low);
+    const minPrice = Math.min(open, close, high, low);
+    const priceRange = maxPrice - minPrice;
+    
+    if (priceRange === 0) return null;
+
+    // Scale factor for positioning
+    const scale = height / priceRange;
+    
+    // Body rectangle
+    const bodyTop = Math.min(open, close);
+    const bodyBottom = Math.max(open, close);
+    const bodyHeight = Math.abs(close - open) * scale;
+    const bodyY = y + (maxPrice - Math.max(open, close)) * scale;
+    
+    // Wick lines
+    const wickX = x + width / 2;
+    const highY = y + (maxPrice - high) * scale;
+    const lowY = y + (maxPrice - low) * scale;
+    const bodyTopY = y + (maxPrice - bodyTop) * scale;
+    const bodyBottomY = y + (maxPrice - bodyBottom) * scale;
+
+    return (
+      <g>
+        {/* Upper wick */}
+        <line
+          x1={wickX}
+          y1={highY}
+          x2={wickX}
+          y2={bodyTopY}
+          stroke={color}
+          strokeWidth={1}
+        />
+        {/* Lower wick */}
+        <line
+          x1={wickX}
+          y1={bodyBottomY}
+          x2={wickX}
+          y2={lowY}
+          stroke={color}
+          strokeWidth={1}
+        />
+        {/* Body */}
+        <rect
+          x={x + width * 0.2}
+          y={bodyY}
+          width={width * 0.6}
+          height={Math.max(bodyHeight, 1)}
+          fill={color}
+          stroke={color}
+          strokeWidth={1}
+        />
+      </g>
+    );
+  };
+
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length > 0) {
+      const data = payload[0].payload;
+      const isBullish = data.close > data.open;
+      const change = ((data.close - data.open) / data.open * 100).toFixed(2);
+
+      return (
+        <div className="bg-slate-800 border border-slate-700 p-3 rounded-lg shadow-lg">
+          <p className="text-white font-semibold mb-2">{data.date}</p>
+          <div className="space-y-1 text-sm">
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Open:</span>
+              <span className="text-white font-medium">${data.open?.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">High:</span>
+              <span className="text-white font-medium">${data.high?.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Low:</span>
+              <span className="text-white font-medium">${data.low?.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Close:</span>
+              <span className={`font-medium ${isBullish ? 'text-green-400' : 'text-red-400'}`}>
+                ${data.close?.toFixed(2)}
+              </span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Change:</span>
+              <span className={`font-medium ${isBullish ? 'text-green-400' : 'text-red-400'}`}>
+                {isBullish ? '+' : ''}{change}%
+              </span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Volume:</span>
+              <span className="text-white font-medium">
+                {(data.volume / 1000000).toFixed(2)}M
+              </span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const periodButtons = [
+    { label: '5D', value: '5d' },
+    { label: '1M', value: '1mo' },
+    { label: '3M', value: '3mo' },
+    { label: '6M', value: '6mo' },
+    { label: '1Y', value: '1y' },
+  ];
+
+  if (loading) {
+    return (
+      <Card className="bg-slate-800 border-slate-700">
+        <CardHeader>
+          <CardTitle className="text-white">Candlestick Chart</CardTitle>
+          <CardDescription className="text-slate-400">Loading chart data...</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="h-96 flex items-center justify-center">
+            <div className="text-slate-400">Loading...</div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="bg-slate-800 border-slate-700">
+        <CardHeader>
+          <CardTitle className="text-white">Candlestick Chart</CardTitle>
+          <CardDescription className="text-red-400">{error}</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  // Calculate volume chart data
+  const maxVolume = Math.max(...data.map(d => d.volume));
+  const volumeData = data.map(d => ({
+    ...d,
+    volumeHeight: (d.volume / maxVolume) * 100,
+    volumeColor: d.close > d.open ? '#10b981' : '#ef4444'
+  }));
+
+  // Calculate price statistics
+  const firstCandle = data[0];
+  const lastCandle = data[data.length - 1];
+  const priceChange = lastCandle.close - firstCandle.open;
+  const priceChangePercent = (priceChange / firstCandle.open) * 100;
+  const periodHigh = Math.max(...data.map(d => d.high));
+  const periodLow = Math.min(...data.map(d => d.low));
+
+  return (
+    <Card className="bg-slate-800 border-slate-700">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-white">Candlestick Chart</CardTitle>
+            <CardDescription className="text-slate-400">
+              OHLC price action with volume overlay
+            </CardDescription>
+          </div>
+          <div className="flex gap-2">
+            {periodButtons.map(btn => (
+              <Button
+                key={btn.value}
+                variant={period === btn.value ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setPeriod(btn.value)}
+                className={period === btn.value ? 'bg-blue-600' : ''}
+              >
+                {btn.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {/* Price Statistics */}
+        <div className="grid grid-cols-4 gap-3 mb-6">
+          <div className="bg-slate-700 p-3 rounded-lg">
+            <div className="text-slate-400 text-xs mb-1">Open</div>
+            <div className="text-white text-lg font-semibold">${firstCandle.open.toFixed(2)}</div>
+          </div>
+          <div className="bg-slate-700 p-3 rounded-lg">
+            <div className="text-slate-400 text-xs mb-1">High</div>
+            <div className="text-white text-lg font-semibold">${periodHigh.toFixed(2)}</div>
+          </div>
+          <div className="bg-slate-700 p-3 rounded-lg">
+            <div className="text-slate-400 text-xs mb-1">Low</div>
+            <div className="text-white text-lg font-semibold">${periodLow.toFixed(2)}</div>
+          </div>
+          <div className={`p-3 rounded-lg ${priceChangePercent >= 0 ? 'bg-green-500/10' : 'bg-red-500/10'}`}>
+            <div className="text-slate-400 text-xs mb-1">Change</div>
+            <div className={`text-lg font-semibold ${priceChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              {priceChangePercent >= 0 ? '+' : ''}{priceChangePercent.toFixed(2)}%
+            </div>
+          </div>
+        </div>
+
+        {/* Candlestick Chart */}
         <ResponsiveContainer width="100%" height={400}>
-          <ComposedChart
-            data={chartData}
-            margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
+          <ComposedChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
             <XAxis
-              dataKey="time"
+              dataKey="date"
               stroke="#94a3b8"
-              tick={{ fontSize: 12 }}
-              interval={Math.floor(chartData.length / 6)}
+              tick={{ fill: '#94a3b8', fontSize: 12 }}
+              tickFormatter={(value) => {
+                const date = new Date(value);
+                return `${date.getMonth() + 1}/${date.getDate()}`;
+              }}
             />
             <YAxis
+              yAxisId="price"
+              domain={['dataMin - 5', 'dataMax + 5']}
               stroke="#94a3b8"
-              tick={{ fontSize: 12 }}
-              domain={["dataMin - 5", "dataMax + 5"]}
+              tick={{ fill: '#94a3b8', fontSize: 12 }}
+              tickFormatter={(value) => `$${value.toFixed(0)}`}
             />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "#1e293b",
-                border: "1px solid #475569",
-                borderRadius: "8px"
-              }}
-              labelStyle={{ color: "#e2e8f0" }}
-              formatter={(value: any) => {
-                if (typeof value === "number") {
-                  return `$${value.toFixed(2)}`;
-                }
-                return value;
-              }}
-              labelFormatter={(label) => `Time: ${label}`}
-            />
-            <Legend
-              wrapperStyle={{ color: "#cbd5e1" }}
-              iconType="line"
-            />
-
-            {/* Bollinger Bands */}
-            <Line
-              type="monotone"
-              dataKey="bollingerUpper"
-              stroke="#f59e0b"
-              strokeDasharray="5 5"
-              dot={false}
-              isAnimationActive={false}
-              name="BB Upper"
-              strokeWidth={1}
-            />
-            <Line
-              type="monotone"
-              dataKey="bollingerLower"
-              stroke="#f59e0b"
-              strokeDasharray="5 5"
-              dot={false}
-              isAnimationActive={false}
-              name="BB Lower"
-              strokeWidth={1}
-            />
-
-            {/* SMA Lines */}
-            <Line
-              type="monotone"
-              dataKey="sma20"
-              stroke="#3b82f6"
-              dot={false}
-              isAnimationActive={false}
-              name="SMA 20"
-              strokeWidth={2}
-            />
-            <Line
-              type="monotone"
-              dataKey="sma50"
-              stroke="#8b5cf6"
-              dot={false}
-              isAnimationActive={false}
-              name="SMA 50"
-              strokeWidth={2}
-            />
-
-            {/* Candlestick shapes - rendered as custom elements */}
+            <Tooltip content={<CustomTooltip />} />
             <Bar
-              dataKey="close"
-              shape={<CustomCandlestick data={chartData} />}
-              isAnimationActive={false}
+              yAxisId="price"
+              dataKey="high"
+              shape={<CustomCandlestick />}
             />
           </ComposedChart>
         </ResponsiveContainer>
-      </Card>
 
-      {/* Legend */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-emerald-500 rounded"></div>
-          <span className="text-slate-400">Bullish (Close {'>'} Open)</span>
+        {/* Volume Chart */}
+        <div className="mt-6">
+          <h4 className="text-white text-sm font-semibold mb-3">Volume</h4>
+          <ResponsiveContainer width="100%" height={100}>
+            <ComposedChart data={volumeData} margin={{ top: 0, right: 30, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis
+                dataKey="date"
+                stroke="#94a3b8"
+                tick={{ fill: '#94a3b8', fontSize: 10 }}
+                tickFormatter={(value) => {
+                  const date = new Date(value);
+                  return `${date.getMonth() + 1}/${date.getDate()}`;
+                }}
+              />
+              <YAxis
+                stroke="#94a3b8"
+                tick={{ fill: '#94a3b8', fontSize: 10 }}
+                tickFormatter={(value) => `${(value / 1000000).toFixed(0)}M`}
+              />
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length > 0) {
+                    const data = payload[0].payload;
+                    return (
+                      <div className="bg-slate-800 border border-slate-700 p-2 rounded shadow-lg">
+                        <p className="text-white text-xs">{data.date}</p>
+                        <p className="text-slate-400 text-xs">
+                          Volume: {(data.volume / 1000000).toFixed(2)}M
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Bar dataKey="volume" radius={[2, 2, 0, 0]}>
+                {volumeData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.volumeColor} opacity={0.6} />
+                ))}
+              </Bar>
+            </ComposedChart>
+          </ResponsiveContainer>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-red-500 rounded"></div>
-          <span className="text-slate-400">Bearish (Close {'<'} Open)</span>
+
+        {/* Legend */}
+        <div className="mt-6 flex items-center gap-6 text-xs">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-green-500 rounded"></div>
+            <span className="text-slate-400">Bullish (Close {'>'} Open)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-red-500 rounded"></div>
+            <span className="text-slate-400">Bearish (Close {'<'} Open)</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-blue-500 rounded"></div>
-          <span className="text-slate-400">SMA 20</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-purple-500 rounded"></div>
-          <span className="text-slate-400">SMA 50</span>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

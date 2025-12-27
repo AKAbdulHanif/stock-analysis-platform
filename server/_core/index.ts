@@ -21,6 +21,7 @@ import monteCarloApiRouter from '../routes/monteCarloApi';
 import taxLossHarvestingApiRouter from '../routes/taxLossHarvestingApi';
 import optionsStrategyApiRouter from '../routes/optionsStrategyApi';
 import technicalIndicatorsApiRouter from '../routes/technicalIndicatorsApi';
+import candlestickPatternApiRouter from '../routes/candlestickPatternApi';
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -77,6 +78,8 @@ async function startServer() {
   app.use("/api/options", optionsStrategyApiRouter);
   // Technical Indicators API routes
   app.use("/api/technical-indicators", technicalIndicatorsApiRouter);
+  // Candlestick Pattern API routes
+  app.use("/api/candlestick-patterns", candlestickPatternApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",
