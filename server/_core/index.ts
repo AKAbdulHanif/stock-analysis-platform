@@ -26,6 +26,7 @@ import economicCalendarApiRouter from '../routes/economicCalendarApi';
 import stockScreenerApiRouter from '../routes/stockScreenerApi';
 import riskMetricsApiRouter from '../routes/riskMetricsApi';
 import sectorRotationApiRouter from '../routes/sectorRotationApi';
+import insiderTradingApiRouter from '../routes/insiderTradingApi';
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -92,6 +93,8 @@ async function startServer() {
   app.use("/api", riskMetricsApiRouter);
   // Sector Rotation API routes
   app.use("/api", sectorRotationApiRouter);
+  // Insider Trading API routes
+  app.use("/api", insiderTradingApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",

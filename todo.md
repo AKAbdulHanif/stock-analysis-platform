@@ -794,3 +794,29 @@
 - [ ] Surprise percentage calculation
 - [ ] Price reaction charts
 - [ ] Integration with stock detail pages
+
+## Insider Trading Tracker (New Feature - In Progress)
+
+### Backend
+- [x] Insider trading service to fetch SEC Form 4 filings
+- [x] Parse insider transaction data (buy/sell, shares, price, date)
+- [x] Identify transaction patterns and clustering
+- [x] Calculate insider sentiment scores
+- [x] Insider trading API endpoints
+
+### Frontend
+- [x] InsiderTradingTracker component
+- [x] Transaction list with executive details
+- [x] Buy/sell indicators and sentiment badges
+- [x] Transaction clustering visualization
+- [x] Filter by transaction type and timeframe
+- [x] Integration into stock detail pages as new tab
+
+### Features
+- [x] Executive name, title, and relationship
+- [x] Transaction type (buy/sell/option exercise)
+- [x] Number of shares and transaction value
+- [x] Transaction date and filing date
+- [x] Insider sentiment indicator (bullish/bearish/neutral)
+- [x] Clustering patterns (multiple insiders buying/selling)
+- [x] Historical insider accuracy tracking
