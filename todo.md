@@ -303,3 +303,17 @@
 - [x] Verify all three tabs work correctly (Sentiment Analysis, News Feed, Fundamentals)
 - [ ] Create final checkpoint
 - [ ] Deploy to production via Manus Publish button
+
+## Expand Watchlists with Diverse Stock Tickers (Completed)
+
+### Add Stock Tickers from Recommended Portfolios
+- [x] Add semiconductor stocks (TSM, NVDA added successfully)
+- [x] Add healthcare stocks (UNH, JNJ added successfully)
+- [x] Add financial stocks (JPM added successfully)
+- [x] Test stock detail pages with each ticker (TSM, NVDA, UNH tested)
+- [x] Verify price charts load correctly (all charts displaying historical data)
+- [x] Verify news feeds display relevant articles (sector-specific news confirmed)
+- [x] Verify sentiment analysis shows historical data (working for all stocks)
+- [x] Verify fundamentals display key metrics (all metrics displaying)
+- [x] Total watchlist: 6 stocks (AAPL, TSM, NVDA, UNH, JNJ, JPM) across 3 sectors
+- [ ] Create checkpoint with expanded watchlist testing
