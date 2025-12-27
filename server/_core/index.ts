@@ -16,6 +16,7 @@ import sentimentHistoryApiRouter from "../routes/sentimentHistoryApi";
 import sentimentSnapshotApiRouter from "../routes/sentimentSnapshotApi";
 import performanceApiRouter from "../routes/performanceApi";
 import stockComparisonApiRouter from "../routes/stockComparisonApi";
+import backtestingApiRouter from "../routes/backtestingApi";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -62,6 +63,8 @@ async function startServer() {
   app.use("/api/performance", performanceApiRouter);
   // Stock Comparison API routes
   app.use("/api/stock", stockComparisonApiRouter);
+  // Backtesting API routes
+  app.use("/api/backtest", backtestingApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",

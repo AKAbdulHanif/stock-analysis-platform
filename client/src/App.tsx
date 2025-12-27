@@ -11,6 +11,7 @@ import Alerts from "./pages/Alerts";
 import Performance from "./pages/Performance";
 import StockDetail from "./pages/StockDetail";
 import StockComparison from "./pages/StockComparison";
+import Backtesting from "./pages/Backtesting";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -21,7 +22,8 @@ function Router() {
       <Route path={"/alerts"} component={Alerts} />
       <Route path={"/performance"} component={Performance} />
       <Route path={"/stock/:ticker"} component={StockDetail} />
-      <Route path={"/compare"} component={StockComparison} />
+       <Route path="/compare" component={StockComparison} />
+      <Route path="/backtest" component={Backtesting} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

@@ -96,7 +96,7 @@ export async function getLatestSentiment(ticker: string): Promise<SentimentHisto
       .select()
       .from(sentimentHistory)
       .where(eq(sentimentHistory.ticker, ticker.toUpperCase()))
-      .orderBy(desc(sentimentHistory.recordedAt))
+      .orderBy(desc(sentimentHistory.date))
       .limit(1);
 
     return latest || null;

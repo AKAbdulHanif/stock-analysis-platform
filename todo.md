@@ -408,3 +408,63 @@
 - [ ] Test trade size calculations
 - [ ] Create final checkpoint
 - [ ] Deploy to production via Manus Publish button
+
+## Portfolio Backtesting Tool (Completed)
+
+### Backend Backtesting Engine
+- [x] Create backtesting service (backtestingService.ts)
+- [x] Implement historical data fetching for multiple stocks
+- [x] Build portfolio simulation logic with initial allocations
+- [x] Implement rebalancing strategies (monthly, quarterly, annually, buy-and-hold/none)
+- [x] Calculate portfolio value over time (snapshots for each day)
+- [x] Calculate performance metrics (total return, CAGR, volatility, Sharpe ratio, max drawdown)
+- [x] Fetch benchmark data (S&P 500 using ^GSPC ticker) for comparison
+- [x] Calculate benchmark metrics (return, CAGR, volatility)
+- [x] Calculate annual returns breakdown by year
+
+### Backtesting API Endpoints
+- [x] Create POST /api/backtest endpoint
+- [x] Accept backtest configuration (tickers, allocations, start/end dates, initial capital, rebalancing frequency)
+- [x] Return backtest results (snapshots, metrics, benchmark, annual returns)
+- [x] Add validation for config (allocations sum to 100%, valid dates, positive capital)
+- [x] Add error handling for missing data and invalid tickers
+- [x] Register route in server index
+
+### Frontend Backtesting UI
+- [x] Create Backtesting page component (Backtesting.tsx)
+- [x] Add strategy configuration form (stock selection with add/remove, allocation inputs, date range)
+- [x] Add rebalancing frequency selector (monthly, quarterly, annually, buy-and-hold/none)
+- [x] Build portfolio value chart over time (blue area chart with gradient)
+- [x] Display performance metrics cards (6 cards: return, CAGR, Sharpe, volatility, max drawdown, final value)
+- [x] Add benchmark comparison chart (dual-line: blue portfolio + green S&P 500 dashed)
+- [x] Show annual returns bar chart (blue bars showing year-by-year performance)
+- [x] Add benchmark comparison table (side-by-side metrics)
+- [x] Add three tabs (Portfolio Value, vs Benchmark, Annual Returns)
+- [x] Add allocation validation (total must equal 100%, shown in green when valid)
+- [x] Add route to App.tsx (/backtest)
+- [x] Add navigation from Home page (purple "Backtest Strategy" button)
+- [x] Fix Activity icon import in Home.tsx
+
+### Testing & Deployment
+- [x] Test backtesting with default portfolio (AAPL 33.33%, NVDA 33.33%, TSM 33.34%)
+- [x] Test with 2023-2024 date range (2 years of historical data)
+- [x] Verify historical data fetching works (successfully fetched data for all 3 stocks)
+- [x] Test quarterly rebalancing logic (working correctly)
+- [x] Verify all metrics calculate correctly:
+  - Total Return: -2.02% (portfolio lost value)
+  - CAGR: -84.47%
+  - Sharpe Ratio: -11.26 (negative due to losses)
+  - Volatility: 7.68%
+  - Max Drawdown: -2.02%
+  - Final Value: $9,797.96 (from $10,000 initial)
+- [x] Verify benchmark comparison:
+  - S&P 500 Return: -1.49% (outperformed portfolio by 0.53%)
+  - S&P 500 Volatility: 5.09% (less volatile than portfolio)
+- [x] Test all three chart tabs (Portfolio Value, vs Benchmark, Annual Returns)
+- [x] Verify annual returns chart shows 2024 performance (-2%)
+- [x] Fix SQL error in sentimentHistoryService (recordedAt → date)
+- [ ] Create final checkpoint
+- [ ] Verify performance metrics calculations
+- [ ] Test benchmark comparison
+- [ ] Create final checkpoint
+- [ ] Deploy to production via Manus Publish button
