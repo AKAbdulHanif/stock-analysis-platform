@@ -7,6 +7,7 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { RiskMetricsDashboard } from "@/components/RiskMetricsDashboard";
 import {
   TrendingUp,
   TrendingDown,
@@ -432,6 +433,17 @@ export default function Performance() {
             </div>
           </div>
         </Card>
+      )}
+
+      {/* Risk Metrics Dashboard */}
+      {allocation && allocation.byStock.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-white mb-4">Risk Analysis</h2>
+          <RiskMetricsDashboard 
+            tickers={allocation.byStock.map(s => s.ticker)}
+            weights={allocation.byStock.map(s => s.percentage / 100)}
+          />
+        </div>
       )}
 
       {/* Performance Chart */}

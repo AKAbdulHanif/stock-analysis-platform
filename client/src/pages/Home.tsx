@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight, Star, Bell, GitCompare, Activity, Sparkles, TrendingDown, Calculator, Filter } from "lucide-react";
+import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight, Star, Bell, GitCompare, Activity, Sparkles, TrendingDown, Calculator, Filter, Grid3x3 } from "lucide-react";
 import { Link } from "wouter";
 import { useState } from "react";
 import StockComparison from "@/components/StockComparison";
@@ -111,6 +111,12 @@ export default function Home() {
               <Button variant="outline" className="w-full justify-start gap-2">
                 <Filter className="w-4 h-4" />
                 Stock Screener
+              </Button>
+            </Link>
+            <Link href="/sector-rotation">
+              <Button variant="outline" className="w-full justify-start gap-2">
+                <Grid3x3 className="w-4 h-4" />
+                Sector Rotation
               </Button>
             </Link>
               <Link href="/watchlists">

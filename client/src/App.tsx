@@ -15,7 +15,8 @@ import Backtesting from './pages/Backtesting';
 import MonteCarloSimulation from './pages/MonteCarloSimulation';
 import TaxLossHarvesting from './pages/TaxLossHarvesting';
 import OptionsAnalyzer from './pages/OptionsAnalyzer';
-import StockScreener from './pages/StockScreener';
+import StockScreener from "./pages/StockScreener";
+import SectorRotation from "./pages/SectorRotation";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -32,6 +33,7 @@ function Router() {
         <Route path="/tax-loss-harvesting" component={TaxLossHarvesting} />
         <Route path="/options" component={OptionsAnalyzer} />
         <Route path="/screener" component={StockScreener} />
+        <Route path="/sector-rotation" component={SectorRotation} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

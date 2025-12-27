@@ -757,3 +757,40 @@
 - [ ] Update StockNews component with sentiment display
 - [ ] Test sentiment accuracy with known bullish/bearish articles
 - [ ] Verify sentiment updates with new articles
+
+## Portfolio Risk Metrics Dashboard (New Feature)
+- [ ] Risk metrics calculation service
+- [ ] Sharpe ratio calculation
+- [ ] Beta calculation (vs S&P 500)
+- [ ] Maximum drawdown analysis
+- [ ] Value-at-Risk (VaR) calculation
+- [ ] Historical volatility tracking
+- [x] Risk metrics API endpoints
+- [ ] Risk dashboard UI component
+- [ ] Volatility charts with Recharts
+- [ ] Risk score visualization
+- [ ] Integration with Performance Dashboard
+
+## Sector Rotation Heatmap (New Feature)
+- [ ] Sector rotation analysis service
+- [ ] 11 sector ETF tracking (XLK, XLV, XLF, etc.)
+- [x] Relative strength calculations
+- [ ] Momentum indicator scoring
+- [x] Sector rotation API endpoints
+- [ ] Heatmap visualization component
+- [ ] Color-coded performance grid
+- [ ] Sector momentum arrows
+- [ ] Historical rotation patterns
+- [ ] Integration with home page
+
+## Earnings Calendar with Estimates (New Feature)
+- [ ] Earnings calendar service
+- [ ] Analyst EPS estimate fetching
+- [x] Earnings surprise history
+- [ ] Post-earnings price movement analysis
+- [ ] Earnings calendar API endpoints
+- [ ] Earnings calendar UI component
+- [ ] Estimate vs actual comparison
+- [ ] Surprise percentage calculation
+- [ ] Price reaction charts
+- [ ] Integration with stock detail pages

@@ -18,6 +18,12 @@ interface CalendarEvent {
     dividendAmount?: number;
     exDividendDate?: string;
     splitRatio?: string;
+    epsEstimate?: number;
+    epsActual?: number;
+    epsSurprise?: number;
+    epsSurprisePercent?: number;
+    revenueEstimate?: number;
+    revenueActual?: number;
   };
 }
 

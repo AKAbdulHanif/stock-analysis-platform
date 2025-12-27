@@ -19,6 +19,12 @@ export interface CalendarEvent {
     dividendAmount?: number;
     exDividendDate?: string;
     splitRatio?: string;
+    epsEstimate?: number;
+    epsActual?: number;
+    epsSurprise?: number;
+    epsSurprisePercent?: number;
+    revenueEstimate?: number;
+    revenueActual?: number;
   };
 }
 
@@ -34,12 +40,18 @@ export async function getStockEvents(ticker: string): Promise<CalendarEvent[]> {
       modules: ['calendarEvents', 'summaryDetail']
     });
 
-    // Extract earnings date
+    // Extract earnings date with estimates
     if (quoteSummary.calendarEvents?.earnings) {
       const earningsData = quoteSummary.calendarEvents.earnings;
       
       if (earningsData.earningsDate && earningsData.earningsDate.length > 0) {
         const earningsDate = earningsData.earningsDate[0];
+        
+        // Get EPS estimates if available
+        const epsEstimate = earningsData.earningsAverage;
+        const epsLow = earningsData.earningsLow;
+        const epsHigh = earningsData.earningsHigh;
+        const revenueEstimate = earningsData.revenueAverage;
         
         events.push({
           id: `${ticker}-earnings-${earningsDate.getTime()}`,
@@ -48,10 +60,14 @@ export async function getStockEvents(ticker: string): Promise<CalendarEvent[]> {
           title: `${ticker} Earnings Report`,
           date: earningsDate.toISOString().split('T')[0],
           timestamp: earningsDate.getTime(),
-          description: `Quarterly earnings report for ${ticker}`,
+          description: epsEstimate 
+            ? `Quarterly earnings report for ${ticker}. Analyst estimate: $${epsEstimate.toFixed(2)} EPS`
+            : `Quarterly earnings report for ${ticker}`,
           importance: 'high',
           metadata: {
-            earningsTime: determineEarningsTime(earningsDate)
+            earningsTime: determineEarningsTime(earningsDate),
+            epsEstimate,
+            revenueEstimate
           }
         });
       }

@@ -24,6 +24,8 @@ import technicalIndicatorsApiRouter from '../routes/technicalIndicatorsApi';
 import candlestickPatternApiRouter from '../routes/candlestickPatternApi';
 import economicCalendarApiRouter from '../routes/economicCalendarApi';
 import stockScreenerApiRouter from '../routes/stockScreenerApi';
+import riskMetricsApiRouter from '../routes/riskMetricsApi';
+import sectorRotationApiRouter from '../routes/sectorRotationApi';
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -86,6 +88,10 @@ async function startServer() {
   app.use("/api/calendar", economicCalendarApiRouter);
   // Stock Screener API routes
   app.use("/api/screener", stockScreenerApiRouter);
+  // Risk Metrics API routes
+  app.use("/api", riskMetricsApiRouter);
+  // Sector Rotation API routes
+  app.use("/api", sectorRotationApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",
