@@ -1,0 +1,22 @@
+{
+  "query": "SELECT * FROM user_alerts LIMIT 1",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3ZZKifmjJVTWLiH.6c76085ec4ce --database g5oK4DbHbBXHsa54ccVWRE --execute SELECT * FROM user_alerts LIMIT 1",
+  "rows": [
+    {
+      "id": "1",
+      "userId": "1",
+      "ticker": "TSM",
+      "alertType": "price_above",
+      "isActive": "1",
+      "lastTriggered": "NULL",
+      "createdAt": "2025-12-27 00:15:44",
+      "updatedAt": "2025-12-27 00:15:44",
+      "targetValue": "",
+      "isRecurring": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tticker\talertType\tisActive\tlastTriggered\tcreatedAt\tupdatedAt\ttargetValue\tisRecurring\n1\t1\tTSM\tprice_above\t1\tNULL\t2025-12-27 00:15:44\t2025-12-27 00:15:44\t\t0\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

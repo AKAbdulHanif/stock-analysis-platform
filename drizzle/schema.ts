@@ -61,7 +61,8 @@ export const userAlerts = mysqlTable("user_alerts", {
   userId: int("userId").notNull(),
   ticker: varchar("ticker", { length: 10 }).notNull(),
   alertType: mysqlEnum("alertType", ["price_above", "price_below", "sentiment_positive", "sentiment_negative", "sentiment_change"]).notNull(),
-  threshold: varchar("threshold", { length: 50 }), // For price alerts: "150.00", for sentiment: "0.05" (5% change)
+  targetValue: varchar("targetValue", { length: 50 }).notNull(), // For price alerts: "150.00", for sentiment: "0.05" (5% change)
+  isRecurring: int("isRecurring").default(0).notNull(), // 0 = one-time, 1 = recurring
   isActive: int("isActive").default(1).notNull(), // 1 = active, 0 = inactive
   lastTriggered: timestamp("lastTriggered"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

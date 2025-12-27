@@ -333,7 +333,7 @@ export default function Alerts() {
                         </div>
                         <p className="text-sm text-slate-400">
                           Target: {alert.alertType.includes("price") ? "$" : ""}
-                          {alert.targetValue.toFixed(2)}
+                          {alert.targetValue ? Number(alert.targetValue).toFixed(2) : "N/A"}
                           {alert.alertType.includes("sentiment") ? "%" : ""}
                         </p>
                       </div>

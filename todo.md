@@ -317,3 +317,32 @@
 - [x] Verify fundamentals display key metrics (all metrics displaying)
 - [x] Total watchlist: 6 stocks (AAPL, TSM, NVDA, UNH, JNJ, JPM) across 3 sectors
 - [ ] Create checkpoint with expanded watchlist testing
+
+## Sector-Specific Watchlists & Price Alerts (Completed)
+
+### Create Sector-Specific Watchlists
+- [x] Create "Semiconductors" watchlist
+- [x] Add TSM, NVDA to Semiconductors watchlist
+- [x] Create "Healthcare" watchlist
+- [x] Add UNH, JNJ to Healthcare watchlist
+- [x] Create "Financials" watchlist
+- [x] Add JPM to Financials watchlist
+- [x] Test watchlist organization and navigation (all 4 watchlists working)
+
+### Set Up Price Alerts
+- [x] Fix database schema mismatch (renamed threshold → targetValue, added isRecurring field)
+- [x] Run database migration (pnpm db:push)
+- [x] Create price alert for TSM above $310 (Target: $310.00)
+- [x] Create price alert for NVDA below $180 (Target: $180.00)
+- [x] Create price alert for UNH above $340 (Target: $340.00)
+- [x] Create price alert for JPM below $320 (Target: $320.00)
+- [x] Verify alert display with correct target values (4 working alerts)
+- [x] Fix alert creation bug (targetValue.toFixed error with optional chaining)
+
+### Testing & Deployment
+- [x] Test sector-specific watchlist views (Semiconductors, Healthcare, Financials)
+- [x] Verify stocks properly organized by sector
+- [x] Test alert creation with fixed schema
+- [x] Restart server to resolve database column caching issue
+- [x] Verify all alerts load correctly after restart
+- [ ] Create final checkpoint
