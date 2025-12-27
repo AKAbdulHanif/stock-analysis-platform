@@ -13,6 +13,7 @@ import {
   clearCache,
   getCacheStats,
 } from '../services/yahooFinanceService';
+import { cacheAside, generateCacheKey, CacheTTL } from '../services/cacheService';
 
 const router = Router();
 
@@ -31,7 +32,15 @@ router.get('/stock-quote/:ticker', async (req: Request, res: Response) => {
       });
     }
 
-    const quote = await getStockQuote(ticker.trim().toUpperCase());
+    const tickerUpper = ticker.trim().toUpperCase();
+    const cacheKey = generateCacheKey('quote', tickerUpper);
+    
+    // Use cache-aside pattern
+    const quote = await cacheAside(
+      cacheKey,
+      CacheTTL.STOCK_QUOTE,
+      () => getStockQuote(tickerUpper)
+    );
     res.json(quote);
   } catch (error) {
     if (error instanceof YahooFinanceError) {
@@ -85,10 +94,19 @@ router.get('/stock-chart/:ticker', async (req: Request, res: Response) => {
       });
     }
 
-    const chartData = await getChartData(
-      ticker.trim().toUpperCase(),
-      period as any,
-      interval as any
+    const tickerUpper = ticker.trim().toUpperCase();
+    const cacheKey = generateCacheKey('chart', tickerUpper, period as string, interval as string);
+    
+    // Use shorter TTL for short-term charts (1d, 5d), longer for historical
+    const ttl = ['1d', '5d'].includes(period as string) 
+      ? CacheTTL.STOCK_CHART_SHORT 
+      : CacheTTL.STOCK_CHART_LONG;
+    
+    // Use cache-aside pattern
+    const chartData = await cacheAside(
+      cacheKey,
+      ttl,
+      () => getChartData(tickerUpper, period as any, interval as any)
     );
     
     res.json(chartData);
@@ -132,7 +150,15 @@ router.post('/stock-quotes', async (req: Request, res: Response) => {
       });
     }
 
-    const quotes = await getMultipleQuotes(tickers.map(t => t.trim().toUpperCase()));
+    const tickersUpper = tickers.map(t => t.trim().toUpperCase());
+    const cacheKey = generateCacheKey('quotes', tickersUpper.sort().join(','));
+    
+    // Use cache-aside pattern for batch quotes
+    const quotes = await cacheAside(
+      cacheKey,
+      CacheTTL.STOCK_QUOTE,
+      () => getMultipleQuotes(tickersUpper)
+    );
     res.json({ quotes });
   } catch (error) {
     console.error('Error fetching multiple quotes:', error);

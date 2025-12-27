@@ -27,6 +27,7 @@ import stockScreenerApiRouter from '../routes/stockScreenerApi';
 import riskMetricsApiRouter from '../routes/riskMetricsApi';
 import sectorRotationApiRouter from '../routes/sectorRotationApi';
 import insiderTradingApiRouter from '../routes/insiderTradingApi';
+import cacheApiRouter from '../routes/cacheApi';
 import { apiLimiter, stockDataLimiter } from './rateLimiter';
 import { securityHeaders, sanitizeInput, requestLogger } from './security';
 
@@ -109,6 +110,8 @@ async function startServer() {
   app.use("/api", sectorRotationApiRouter);
   // Insider Trading API routes
   app.use("/api", insiderTradingApiRouter);
+  // Cache API routes
+  app.use("/api/cache", cacheApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",
