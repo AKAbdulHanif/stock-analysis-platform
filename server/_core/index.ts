@@ -22,6 +22,7 @@ import taxLossHarvestingApiRouter from '../routes/taxLossHarvestingApi';
 import optionsStrategyApiRouter from '../routes/optionsStrategyApi';
 import technicalIndicatorsApiRouter from '../routes/technicalIndicatorsApi';
 import candlestickPatternApiRouter from '../routes/candlestickPatternApi';
+import economicCalendarApiRouter from '../routes/economicCalendarApi';
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -80,6 +81,8 @@ async function startServer() {
   app.use("/api/technical-indicators", technicalIndicatorsApiRouter);
   // Candlestick Pattern API routes
   app.use("/api/candlestick-patterns", candlestickPatternApiRouter);
+  // Economic Calendar API routes
+  app.use("/api/calendar", economicCalendarApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",

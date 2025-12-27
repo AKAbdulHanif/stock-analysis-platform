@@ -9,6 +9,7 @@ import SentimentTrendChart from "@/components/SentimentTrendChart";
 import { StockNews } from "@/components/StockNews";
 import TechnicalIndicators from "@/components/TechnicalIndicators";
 import CandlestickChart from "@/components/CandlestickChart";
+import EconomicCalendar from "@/components/EconomicCalendar";
 import { toast } from "sonner";
 
 interface StockQuote {
@@ -297,10 +298,11 @@ export default function StockDetail() {
 
         {/* Tabs for different sections */}
         <Tabs defaultValue="sentiment" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-slate-700">
+          <TabsList className="grid w-full grid-cols-5 bg-slate-700">
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
             <TabsTrigger value="technical">Technical Indicators</TabsTrigger>
             <TabsTrigger value="news">News Feed</TabsTrigger>
+            <TabsTrigger value="calendar">Calendar</TabsTrigger>
             <TabsTrigger value="fundamentals">Fundamentals</TabsTrigger>
           </TabsList>
 
@@ -314,6 +316,10 @@ export default function StockDetail() {
 
           <TabsContent value="news" className="space-y-6">
             <StockNews ticker={ticker} />
+          </TabsContent>
+
+          <TabsContent value="calendar" className="space-y-6">
+            <EconomicCalendar ticker={ticker} />
           </TabsContent>
 
           <TabsContent value="fundamentals" className="space-y-6">

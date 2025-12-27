@@ -684,3 +684,29 @@
 - [ ] Add pattern alerts to notification system
 - [x] Test with multiple stocks (AAPL, NVDA, TSLA)
 - [x] Ensure responsive design on mobile devices
+
+## Economic Calendar Integration (New Feature)
+
+### Backend Services
+- [x] Create economicCalendarService to fetch earnings dates
+- [x] Add dividend payment date fetching
+- [x] Implement stock split detection
+- [x] Add ex-dividend date tracking
+- [x] Create API endpoint for stock-specific events
+- [x] Add caching for calendar data (24-hour TTL)
+
+### Frontend Components
+- [x] Build EconomicCalendar component with timeline view
+- [x] Create EventCard component for individual events
+- [x] Add event type icons (earnings, dividend, split)
+- [x] Implement date filtering (upcoming 30/60/90 days)
+- [x] Add countdown timers for upcoming events
+- [x] Style events by importance (earnings = high priority)
+
+### Integration
+- [x] Add calendar tab to stock detail pages
+- [x] Display upcoming earnings date prominently
+- [x] Show next dividend payment date in header
+- [x] Add calendar widget to home page
+- [x] Implement event notifications/alerts
+- [x] Test with multiple stocks (AAPL, MSFT, JNJ)
