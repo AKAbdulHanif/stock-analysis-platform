@@ -59,11 +59,11 @@ export function StockNews({ ticker, maxArticles = 5 }: StockNewsProps) {
   const getSentimentColor = (label: string) => {
     switch (label) {
       case "positive":
-        return "text-green-600 bg-green-100";
+        return "text-green-400 bg-green-900/30";
       case "negative":
-        return "text-red-600 bg-red-100";
+        return "text-red-400 bg-red-900/30";
       default:
-        return "text-gray-600 bg-gray-100";
+        return "text-slate-400 bg-slate-700/30";
     }
   };
 

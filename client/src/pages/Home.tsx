@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight, Star, Bell, GitCompare, Activity, Sparkles, TrendingDown, Calculator } from "lucide-react";
+import { TrendingUp, BarChart3, Gem, DollarSign, ArrowUpRight, ArrowDownRight, Star, Bell, GitCompare, Activity, Sparkles, TrendingDown, Calculator, Filter } from "lucide-react";
 import { Link } from "wouter";
 import { useState } from "react";
 import StockComparison from "@/components/StockComparison";
@@ -101,12 +101,18 @@ export default function Home() {
               Tax-Loss Harvesting
             </Button>
           </Link>
-          <Link href="/options">
-            <Button variant="outline" className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10">
-              <Calculator className="mr-2 h-4 w-4" />
-              Options Analyzer
-            </Button>
-          </Link>
+            <Link href="/options">
+              <Button variant="outline" className="w-full justify-start gap-2">
+                <Calculator className="w-4 h-4" />
+                Options Analyzer
+              </Button>
+            </Link>
+            <Link href="/screener">
+              <Button variant="outline" className="w-full justify-start gap-2">
+                <Filter className="w-4 h-4" />
+                Stock Screener
+              </Button>
+            </Link>
               <Link href="/watchlists">
                 <Button variant="outline" className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
                   <Star className="mr-2 h-4 w-4" />

@@ -23,6 +23,7 @@ import optionsStrategyApiRouter from '../routes/optionsStrategyApi';
 import technicalIndicatorsApiRouter from '../routes/technicalIndicatorsApi';
 import candlestickPatternApiRouter from '../routes/candlestickPatternApi';
 import economicCalendarApiRouter from '../routes/economicCalendarApi';
+import stockScreenerApiRouter from '../routes/stockScreenerApi';
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -83,6 +84,8 @@ async function startServer() {
   app.use("/api/candlestick-patterns", candlestickPatternApiRouter);
   // Economic Calendar API routes
   app.use("/api/calendar", economicCalendarApiRouter);
+  // Stock Screener API routes
+  app.use("/api/screener", stockScreenerApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",

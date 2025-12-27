@@ -710,3 +710,50 @@
 - [x] Add calendar widget to home page
 - [x] Implement event notifications/alerts
 - [x] Test with multiple stocks (AAPL, MSFT, JNJ)
+
+## Stock Screener Tool (New Feature)
+
+### Backend Services
+- [ ] Create stockScreenerService with universe of 500+ stocks
+- [ ] Implement technical signal filters (RSI, MACD, Bollinger Bands)
+- [ ] Add fundamental metric filters (P/E, dividend yield, market cap)
+- [ ] Build combined filter logic (AND/OR conditions)
+- [ ] Add sorting by multiple criteria
+- [ ] Implement pagination for large result sets
+- [ ] Create API endpoint for screener queries
+
+### Frontend Components
+- [ ] Build StockScreener page with filter sidebar
+- [ ] Create technical filter controls (RSI range, MACD crossover)
+- [ ] Add fundamental filter controls (P/E, yield, market cap)
+- [ ] Build results table with sortable columns
+- [ ] Add export to watchlist functionality
+- [ ] Implement save/load custom screens
+- [ ] Add preset screens (value, growth, dividend, momentum)
+
+### Integration
+- [ ] Add Screener button to home page navigation
+- [ ] Create /screener route
+- [ ] Test with multiple filter combinations
+- [ ] Verify performance with large result sets
+
+## News Sentiment Analysis (Enhancement)
+
+### Backend Services
+- [ ] Integrate sentiment analysis API or library
+- [ ] Add sentiment scoring to news fetching service
+- [ ] Calculate bullish/bearish/neutral scores (0-100)
+- [ ] Cache sentiment scores to reduce API calls
+- [ ] Add aggregate sentiment for stock (average of all articles)
+
+### Frontend Components
+- [ ] Add sentiment badge to each news article card
+- [ ] Display sentiment score with color coding (green/red/gray)
+- [ ] Add sentiment filter (show only bullish/bearish)
+- [ ] Create sentiment trend chart (sentiment over time)
+- [ ] Add sentiment summary at top of News Feed
+
+### Integration
+- [ ] Update StockNews component with sentiment display
+- [ ] Test sentiment accuracy with known bullish/bearish articles
+- [ ] Verify sentiment updates with new articles

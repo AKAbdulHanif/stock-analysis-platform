@@ -6,6 +6,7 @@
 
 import express from 'express';
 import { getStockNews, getPortfolioNews, clearNewsCache, getNewsCacheStats } from '../services/newsService';
+import { enhanceNewsWithSentiment } from '../services/newsSentimentService';
 
 const router = express.Router();
 
@@ -24,10 +25,21 @@ router.get('/news/:ticker', async (req, res) => {
 
     const news = await getStockNews(ticker.toUpperCase(), limit);
     
+    // Add sentiment analysis to news articles
+    const newsWithSentiment = enhanceNewsWithSentiment(news).map(article => ({
+      ...article,
+      sentiment: {
+        score: article.sentiment.score,
+        label: article.sentiment.label === 'bullish' ? 'positive' : 
+               article.sentiment.label === 'bearish' ? 'negative' : 'neutral',
+        confidence: article.sentiment.confidence
+      }
+    }));
+    
     res.json({
       ticker: ticker.toUpperCase(),
-      count: news.length,
-      articles: news
+      count: newsWithSentiment.length,
+      articles: newsWithSentiment
     });
   } catch (error: any) {
     console.error('Error in /api/news/:ticker:', error);
