@@ -20,6 +20,7 @@ import backtestingApiRouter from '../routes/backtestingApi';
 import monteCarloApiRouter from '../routes/monteCarloApi';
 import taxLossHarvestingApiRouter from '../routes/taxLossHarvestingApi';
 import optionsStrategyApiRouter from '../routes/optionsStrategyApi';
+import technicalIndicatorsApiRouter from '../routes/technicalIndicatorsApi';
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -74,6 +75,8 @@ async function startServer() {
   app.use("/api/tax-loss-harvesting", taxLossHarvestingApiRouter);
   // Options Strategy API routes
   app.use("/api/options", optionsStrategyApiRouter);
+  // Technical Indicators API routes
+  app.use("/api/technical-indicators", technicalIndicatorsApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",

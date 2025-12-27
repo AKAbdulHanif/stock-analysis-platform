@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from "recharts";
 import SentimentTrendChart from "@/components/SentimentTrendChart";
 import { StockNews } from "@/components/StockNews";
+import TechnicalIndicators from "@/components/TechnicalIndicators";
 import { toast } from "sonner";
 
 interface StockQuote {
@@ -252,14 +253,19 @@ export default function StockDetail() {
 
         {/* Tabs for different sections */}
         <Tabs defaultValue="sentiment" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-700">
+          <TabsList className="grid w-full grid-cols-4 bg-slate-700">
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
+            <TabsTrigger value="technical">Technical Indicators</TabsTrigger>
             <TabsTrigger value="news">News Feed</TabsTrigger>
             <TabsTrigger value="fundamentals">Fundamentals</TabsTrigger>
           </TabsList>
 
           <TabsContent value="sentiment" className="space-y-6">
             <SentimentTrendChart ticker={ticker} />
+          </TabsContent>
+
+          <TabsContent value="technical" className="space-y-6">
+            <TechnicalIndicators ticker={ticker} />
           </TabsContent>
 
           <TabsContent value="news" className="space-y-6">

@@ -613,3 +613,46 @@
 - [x] Test profit/loss diagrams
 - [x] Create final checkpoint
 
+
+## Technical Indicators & Signal Detection (Completed)
+
+### Backend Technical Indicators Service
+- [x] Create technical indicators calculation service (technicalIndicatorsService.ts)
+- [x] Implement RSI (Relative Strength Index) calculation (14-period default)
+- [x] Implement MACD (Moving Average Convergence Divergence) calculation
+- [x] Implement Bollinger Bands calculation (20-period, 2 std dev)
+- [x] Implement SMA (Simple Moving Average) for multiple periods
+- [x] Implement EMA (Exponential Moving Average) for multiple periods
+- [x] Add signal detection logic (overbought/oversold, crossovers, band touches)
+- [x] Create technical indicators API endpoint (GET /api/technical-indicators/:ticker)
+
+### Frontend Technical Indicators Component
+- [x] Create TechnicalIndicators component for stock detail pages
+- [x] Build RSI chart with overbought (70) and oversold (30) lines
+- [x] Build MACD chart with signal line and histogram
+- [x] Build Bollinger Bands chart overlaid on price chart
+- [x] Add signal badges (Buy/Sell/Neutral) based on indicator readings
+- [x] Display current indicator values with color coding
+- [x] Add indicator interpretation explanations
+- [x] Add timeframe selector (1D, 1W, 1M, 3M, 1Y)
+
+### Signal Detection Logic
+- [x] RSI: Oversold (<30) = Buy signal, Overbought (>70) = Sell signal
+- [x] MACD: Bullish crossover = Buy, Bearish crossover = Sell
+- [x] Bollinger Bands: Price touches lower band = Buy, upper band = Sell
+- [x] Combine multiple signals for consensus recommendation
+- [x] Add signal strength scoring (Strong Buy, Buy, Neutral, Sell, Strong Sell)
+- [x] Display signal history and accuracy tracking
+
+### Integration
+- [x] Add technical indicators section to StockDetail page
+- [x] Update stock comparison to include technical signals
+- [x] Add technical signal filters to watchlists
+- [x] Integrate signals with alert system
+
+### Testing & Deployment
+- [x] Test RSI calculations with known data
+- [x] Test MACD crossover detection
+- [x] Test Bollinger Bands with volatile stocks
+- [x] Verify signal accuracy with historical data
+- [x] Create final checkpoint
