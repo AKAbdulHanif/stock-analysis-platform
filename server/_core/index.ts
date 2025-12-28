@@ -33,6 +33,7 @@ import sectorPerformanceRouter from '../routes/sectorPerformance';
 import sectorComparisonApiRouter from '../routes/sectorComparisonApi';
 import stockDetailApiRouter from '../routes/stockDetailApi';
 import portfolioBuilderApiRouter from '../routes/portfolioBuilderApi';
+import portfolioApiRouter from '../routes/portfolioApi';
 import { realtimePriceService } from '../services/realtimePriceService';
 import { apiLimiter, stockDataLimiter } from './rateLimiter';
 import { securityHeaders, sanitizeInput, requestLogger } from './security';
@@ -128,6 +129,8 @@ async function startServer() {
   app.use("/api", stockDetailApiRouter);
   // Portfolio Builder API routes
   app.use("/api", portfolioBuilderApiRouter);
+  // Portfolio CRUD API routes
+  app.use("/api", portfolioApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",

@@ -4,7 +4,12 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Plus, Trash2, TrendingUp, TrendingDown, PieChart, Activity } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, TrendingUp, TrendingDown, PieChart, Activity, Save, FolderOpen, FileText } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { toast } from 'sonner';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -121,12 +126,29 @@ function SortablePosition({ position, onUpdate, onRemove }: { position: Position
   );
 }
 
+interface SavedPortfolio {
+  id: number;
+  name: string;
+  description: string | null;
+  positionCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function PortfolioBuilder() {
   const [positions, setPositions] = useState<Position[]>([]);
   const [metrics, setMetrics] = useState<PortfolioMetrics | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Array<{ ticker: string; name: string }>>([]);
+  
+  // Save/Load state
+  const [savedPortfolios, setSavedPortfolios] = useState<SavedPortfolio[]>([]);
+  const [currentPortfolioId, setCurrentPortfolioId] = useState<number | null>(null);
+  const [portfolioName, setPortfolioName] = useState('');
+  const [portfolioDescription, setPortfolioDescription] = useState('');
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [loadDialogOpen, setLoadDialogOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -219,6 +241,132 @@ export default function PortfolioBuilder() {
     }
   };
 
+  // Load saved portfolios on mount
+  useEffect(() => {
+    loadSavedPortfolios();
+  }, []);
+
+  const loadSavedPortfolios = async () => {
+    try {
+      const response = await fetch('/api/portfolios');
+      if (!response.ok) {
+        throw new Error('Failed to fetch portfolios');
+      }
+      const data = await response.json();
+      setSavedPortfolios(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('Failed to load portfolios:', error);
+      setSavedPortfolios([]);
+    }
+  };
+
+  const savePortfolio = async () => {
+    if (!portfolioName.trim()) {
+      toast.error('Please enter a portfolio name');
+      return;
+    }
+
+    if (positions.length === 0) {
+      toast.error('Cannot save an empty portfolio');
+      return;
+    }
+
+    try {
+      const url = currentPortfolioId 
+        ? `/api/portfolios/${currentPortfolioId}` 
+        : '/api/portfolios';
+      
+      const method = currentPortfolioId ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: portfolioName,
+          description: portfolioDescription,
+          positions: positions.map(p => ({
+            ticker: p.ticker,
+            shares: p.shares,
+            avgCost: p.avgCost,
+          })),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save portfolio');
+      }
+
+      const savedPortfolio = await response.json();
+      setCurrentPortfolioId(savedPortfolio.id);
+      toast.success(currentPortfolioId ? 'Portfolio updated!' : 'Portfolio saved!');
+      setSaveDialogOpen(false);
+      loadSavedPortfolios();
+    } catch (error) {
+      console.error('Error saving portfolio:', error);
+      toast.error('Failed to save portfolio');
+    }
+  };
+
+  const loadPortfolio = async (portfolioId: number) => {
+    try {
+      const response = await fetch(`/api/portfolios/${portfolioId}`);
+      const data = await response.json();
+
+      setCurrentPortfolioId(data.id);
+      setPortfolioName(data.name);
+      setPortfolioDescription(data.description || '');
+      
+      const loadedPositions = data.positions.map((p: any) => ({
+        id: `${p.ticker}-${Date.now()}-${Math.random()}`,
+        ticker: p.ticker,
+        shares: p.shares,
+        avgCost: p.avgCost,
+      }));
+      
+      setPositions(loadedPositions);
+      setLoadDialogOpen(false);
+      toast.success(`Loaded portfolio: ${data.name}`);
+    } catch (error) {
+      console.error('Error loading portfolio:', error);
+      toast.error('Failed to load portfolio');
+    }
+  };
+
+  const deletePortfolio = async (portfolioId: number) => {
+    if (!confirm('Are you sure you want to delete this portfolio?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/portfolios/${portfolioId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete portfolio');
+      }
+
+      toast.success('Portfolio deleted');
+      loadSavedPortfolios();
+      
+      if (currentPortfolioId === portfolioId) {
+        newPortfolio();
+      }
+    } catch (error) {
+      console.error('Error deleting portfolio:', error);
+      toast.error('Failed to delete portfolio');
+    }
+  };
+
+  const newPortfolio = () => {
+    setCurrentPortfolioId(null);
+    setPortfolioName('');
+    setPortfolioDescription('');
+    setPositions([]);
+    setMetrics(null);
+    toast.success('Started new portfolio');
+  };
+
   const chartData = metrics?.positions.map(p => ({
     name: p.ticker,
     value: p.weight,
@@ -236,11 +384,130 @@ export default function PortfolioBuilder() {
           </Button>
         </Link>
 
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Portfolio Builder</h1>
-          <p className="text-slate-300">
-            Build and analyze your custom portfolio with real-time metrics
-          </p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-white mb-2">
+              {currentPortfolioId ? portfolioName : 'Portfolio Builder'}
+            </h1>
+            <p className="text-slate-300">
+              Build and analyze your custom portfolio with real-time metrics
+            </p>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button
+              onClick={newPortfolio}
+              variant="outline"
+              className="border-slate-600 text-slate-300 hover:bg-slate-800"
+            >
+              <FileText className="mr-2 h-4 w-4" />
+              New
+            </Button>
+            
+            <Dialog open={loadDialogOpen} onOpenChange={setLoadDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10"
+                >
+                  <FolderOpen className="mr-2 h-4 w-4" />
+                  Load
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-slate-800 border-slate-700">
+                <DialogHeader>
+                  <DialogTitle className="text-white">Load Portfolio</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-3 max-h-96 overflow-y-auto">
+                  {savedPortfolios.length === 0 ? (
+                    <p className="text-slate-400 text-center py-8">No saved portfolios yet</p>
+                  ) : (
+                    savedPortfolios.map((portfolio) => (
+                      <Card
+                        key={portfolio.id}
+                        className="bg-slate-700/50 border-slate-600 p-4 cursor-pointer hover:bg-slate-700"
+                        onClick={() => loadPortfolio(portfolio.id)}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-white">{portfolio.name}</h3>
+                            {portfolio.description && (
+                              <p className="text-sm text-slate-400 mt-1">{portfolio.description}</p>
+                            )}
+                            <div className="flex gap-4 mt-2 text-xs text-slate-500">
+                              <span>{portfolio.positionCount} positions</span>
+                              <span>Updated {new Date(portfolio.updatedAt).toLocaleDateString()}</span>
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deletePortfolio(portfolio.id);
+                            }}
+                            className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </Card>
+                    ))
+                  )}
+                </div>
+              </DialogContent>
+            </Dialog>
+            
+            <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  disabled={positions.length === 0}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  <Save className="mr-2 h-4 w-4" />
+                  Save
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-slate-800 border-slate-700">
+                <DialogHeader>
+                  <DialogTitle className="text-white">
+                    {currentPortfolioId ? 'Update Portfolio' : 'Save Portfolio'}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="name" className="text-slate-300">Portfolio Name</Label>
+                    <Input
+                      id="name"
+                      value={portfolioName}
+                      onChange={(e) => setPortfolioName(e.target.value)}
+                      placeholder="My Investment Portfolio"
+                      className="bg-slate-700 border-slate-600 text-white mt-2"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="description" className="text-slate-300">Description (optional)</Label>
+                    <Textarea
+                      id="description"
+                      value={portfolioDescription}
+                      onChange={(e) => setPortfolioDescription(e.target.value)}
+                      placeholder="Long-term growth portfolio focused on tech and healthcare..."
+                      className="bg-slate-700 border-slate-600 text-white mt-2"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button
+                    onClick={savePortfolio}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    {currentPortfolioId ? 'Update' : 'Save'} Portfolio
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
         {/* Portfolio Metrics */}
@@ -248,7 +515,7 @@ export default function PortfolioBuilder() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <Card className="bg-slate-800/50 border-slate-700 p-6">
               <p className="text-sm text-slate-400 mb-1">Total Value</p>
-              <p className="text-3xl font-bold text-white">${metrics.totalValue.toFixed(2)}</p>
+              <p className="text-3xl font-bold text-white">${metrics.totalValue?.toFixed(2) ?? '0.00'}</p>
             </Card>
             
             <Card className="bg-slate-800/50 border-slate-700 p-6">
@@ -256,17 +523,17 @@ export default function PortfolioBuilder() {
               <div className="flex items-center gap-2">
                 {metrics.totalReturn >= 0 ? <TrendingUp className="h-6 w-6 text-green-400" /> : <TrendingDown className="h-6 w-6 text-red-400" />}
                 <p className={`text-3xl font-bold ${metrics.totalReturn >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {metrics.totalReturn >= 0 ? '+' : ''}${metrics.totalReturn.toFixed(2)}
+                  {metrics.totalReturn >= 0 ? '+' : ''}${metrics.totalReturn?.toFixed(2) ?? '0.00'}
                 </p>
               </div>
               <p className={`text-sm ${metrics.totalReturnPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                {metrics.totalReturnPercent >= 0 ? '+' : ''}{metrics.totalReturnPercent.toFixed(2)}%
+                {metrics.totalReturnPercent >= 0 ? '+' : ''}{metrics.totalReturnPercent?.toFixed(2) ?? '0.00'}%
               </p>
             </Card>
             
             <Card className="bg-slate-800/50 border-slate-700 p-6">
               <p className="text-sm text-slate-400 mb-1">Sharpe Ratio</p>
-              <p className="text-3xl font-bold text-white">{metrics.sharpeRatio.toFixed(2)}</p>
+              <p className="text-3xl font-bold text-white">{metrics.sharpeRatio?.toFixed(2) ?? '0.00'}</p>
               <Badge className={
                 metrics.sharpeRatio > 1 ? 'bg-green-500/10 text-green-500' :
                 metrics.sharpeRatio > 0 ? 'bg-blue-500/10 text-blue-500' :
@@ -278,7 +545,7 @@ export default function PortfolioBuilder() {
             
             <Card className="bg-slate-800/50 border-slate-700 p-6">
               <p className="text-sm text-slate-400 mb-1">Diversification Score</p>
-              <p className="text-3xl font-bold text-white">{metrics.diversificationScore.toFixed(0)}/100</p>
+              <p className="text-3xl font-bold text-white">{metrics.diversificationScore?.toFixed(0) ?? '0'}/100</p>
               <Badge className={
                 metrics.diversificationScore > 70 ? 'bg-green-500/10 text-green-500' :
                 metrics.diversificationScore > 40 ? 'bg-yellow-500/10 text-yellow-500' :

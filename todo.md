@@ -997,3 +997,23 @@
 - [ ] Show individual stock performance within portfolio
 - [ ] Add save/load portfolio functionality
 - [x] Add route for /portfolio-builder
+
+## Portfolio Save/Load Functionality
+- [x] Create database schema for portfolios table
+- [x] Create database schema for portfolio_positions table
+- [x] Run database migration to create tables
+- [x] Implement API endpoint: POST /api/portfolios (create portfolio)
+- [x] Implement API endpoint: GET /api/portfolios (list user's portfolios)
+- [x] Implement API endpoint: GET /api/portfolios/:id (get portfolio details)
+- [x] Implement API endpoint: PUT /api/portfolios/:id (update portfolio)
+- [x] Implement API endpoint: DELETE /api/portfolios/:id (delete portfolio)
+- [x] Add "Save Portfolio" button and modal to Portfolio Builder
+- [x] Add "Load Portfolio" dropdown to Portfolio Builder
+- [x] Add portfolio name input field
+- [x] Add portfolio description field
+- [x] Display saved portfolios list with metadata (name, created date, last modified)
+- [x] Add delete portfolio confirmation dialog
+- [x] Add "New Portfolio" button to clear current positions
+- [x] Show active portfolio name in header
+- [ ] Add auto-save functionality (optional)
+- [x] Test save/load workflow end-to-end

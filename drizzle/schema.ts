@@ -137,3 +137,34 @@ export const benchmarkData = mysqlTable("benchmark_data", {
 
 export type BenchmarkData = typeof benchmarkData.$inferSelect;
 export type InsertBenchmarkData = typeof benchmarkData.$inferInsert;
+
+/**
+ * Portfolios - User-created investment portfolios
+ */
+export const portfolios = mysqlTable("portfolios", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 100 }).notNull(),
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Portfolio = typeof portfolios.$inferSelect;
+export type InsertPortfolio = typeof portfolios.$inferInsert;
+
+/**
+ * Portfolio Positions - Stocks in a portfolio with quantity and cost basis
+ */
+export const portfolioPositions = mysqlTable("portfolio_positions", {
+  id: int("id").autoincrement().primaryKey(),
+  portfolioId: int("portfolioId").notNull(),
+  ticker: varchar("ticker", { length: 10 }).notNull(),
+  shares: varchar("shares", { length: 20 }).notNull(), // Store as string to preserve precision
+  avgCost: varchar("avgCost", { length: 20 }).notNull(), // Average cost per share
+  addedAt: timestamp("addedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PortfolioPosition = typeof portfolioPositions.$inferSelect;
+export type InsertPortfolioPosition = typeof portfolioPositions.$inferInsert;
