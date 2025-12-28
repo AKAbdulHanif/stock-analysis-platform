@@ -77,83 +77,93 @@ export default function Home() {
               <h1 className="text-3xl font-bold text-white mb-1">Investment Outlook 2026</h1>
               <p className="text-slate-400">Deep Research & Stock Recommendations</p>
             </div>
-            <div className="flex items-center gap-4">
-              <StockSearch />
-          <Link href="/sectors">
-            <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
-              <Grid3x3 className="mr-2 h-4 w-4" />
-              Sectors
-            </Button>
-          </Link>
-          <Link href="/sector-comparison">
-            <Button variant="outline" className="border-green-500/50 text-green-400 hover:bg-green-500/10">
-              <GitCompare className="mr-2 h-4 w-4" />
-              Compare Sectors
-            </Button>
-          </Link>
-          <Link href="/portfolio-builder">
-            <Button variant="outline" className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10">
-              <BarChart3 className="mr-2 h-4 w-4" />
-              Portfolio Builder
-            </Button>
-          </Link>
-          <Link href="/compare">
-            <Button variant="outline" className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10">
-              <TrendingUp className="mr-2 h-4 w-4" />
-              Compare Stocks
-            </Button>
-          </Link>
-          <Link href="/backtest">
-            <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
-              <Activity className="mr-2 h-4 w-4" />
-              Backtest Strategy
-            </Button>
-          </Link>
-          <Link href="/monte-carlo">
-            <Button variant="outline" className="border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/10">
-              <Sparkles className="mr-2 h-4 w-4" />
-              Monte Carlo
-            </Button>
-          </Link>
-          <Link href="/tax-loss-harvesting">
-            <Button variant="outline" className="border-red-500/50 text-red-400 hover:bg-red-500/10">
-              <TrendingDown className="mr-2 h-4 w-4" />
-              Tax-Loss Harvesting
-            </Button>
-          </Link>
-            <Link href="/options">
-              <Button variant="outline" className="w-full justify-start gap-2">
-                <Calculator className="w-4 h-4" />
-                Options Analyzer
-              </Button>
-            </Link>
-            <Link href="/screener">
-              <Button variant="outline" className="w-full justify-start gap-2">
-                <Filter className="w-4 h-4" />
-                Stock Screener
-              </Button>
-            </Link>
-            <Link href="/sector-rotation">
-              <Button variant="outline" className="w-full justify-start gap-2">
-                <Grid3x3 className="w-4 h-4" />
-                Sector Rotation
-              </Button>
-            </Link>
-              <Link href="/watchlists">
-                <Button variant="outline" className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
-                  <Star className="mr-2 h-4 w-4" />
-                  My Watchlists
-                </Button>
-              </Link>
-              <Link href="/alerts">
-                <Button variant="outline" className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
-                  <Bell className="mr-2 h-4 w-4" />
-                  Alerts
-                </Button>
-              </Link>
-              <div className="text-right">
-                <p className="text-sm text-slate-500">December 26, 2025</p>
-                <p className="text-sm text-slate-500">By Manus AI</p>
+            <div className="flex flex-col gap-3">
+              {/* Search Bar */}
+              <div className="flex justify-end">
+                <StockSearch />
+              </div>
+              
+              {/* Navigation Buttons - Two Rows */}
+              <div className="flex flex-col gap-2">
+                {/* Row 1: Core Analysis & Portfolio Tools */}
+                <div className="flex items-center gap-2 flex-wrap justify-end">
+                  <Link href="/sectors">
+                    <Button variant="outline" size="sm" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
+                      <Grid3x3 className="mr-1.5 h-3.5 w-3.5" />
+                      Sectors
+                    </Button>
+                  </Link>
+                  <Link href="/sector-comparison">
+                    <Button variant="outline" size="sm" className="border-green-500/50 text-green-400 hover:bg-green-500/10">
+                      <GitCompare className="mr-1.5 h-3.5 w-3.5" />
+                      Compare Sectors
+                    </Button>
+                  </Link>
+                  <Link href="/portfolio-builder">
+                    <Button variant="outline" size="sm" className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10">
+                      <BarChart3 className="mr-1.5 h-3.5 w-3.5" />
+                      Portfolio Builder
+                    </Button>
+                  </Link>
+                  <Link href="/compare">
+                    <Button variant="outline" size="sm" className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10">
+                      <TrendingUp className="mr-1.5 h-3.5 w-3.5" />
+                      Compare Stocks
+                    </Button>
+                  </Link>
+                  <Link href="/watchlists">
+                    <Button variant="outline" size="sm" className="border-slate-600 text-white hover:bg-slate-700">
+                      <Star className="mr-1.5 h-3.5 w-3.5" />
+                      Watchlists
+                    </Button>
+                  </Link>
+                </div>
+                
+                {/* Row 2: Advanced Tools & Strategies */}
+                <div className="flex items-center gap-2 flex-wrap justify-end">
+                  <Link href="/backtest">
+                    <Button variant="outline" size="sm" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
+                      <Activity className="mr-1.5 h-3.5 w-3.5" />
+                      Backtest Strategy
+                    </Button>
+                  </Link>
+                  <Link href="/monte-carlo">
+                    <Button variant="outline" size="sm" className="border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/10">
+                      <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                      Monte Carlo
+                    </Button>
+                  </Link>
+                  <Link href="/tax-loss-harvesting">
+                    <Button variant="outline" size="sm" className="border-red-500/50 text-red-400 hover:bg-red-500/10">
+                      <TrendingDown className="mr-1.5 h-3.5 w-3.5" />
+                      Tax-Loss Harvesting
+                    </Button>
+                  </Link>
+                  <Link href="/options">
+                    <Button variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-700">
+                      <Calculator className="mr-1.5 h-3.5 w-3.5" />
+                      Options Analyzer
+                    </Button>
+                  </Link>
+                  <Link href="/screener">
+                    <Button variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-700">
+                      <Filter className="mr-1.5 h-3.5 w-3.5" />
+                      Stock Screener
+                    </Button>
+                  </Link>
+                  <Link href="/sector-rotation">
+                    <Button variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-700">
+                      <Grid3x3 className="mr-1.5 h-3.5 w-3.5" />
+                      Sector Rotation
+                    </Button>
+                  </Link>
+                  <Link href="/alerts">
+                    <Button variant="outline" size="sm" className="border-slate-600 text-white hover:bg-slate-700">
+                      <Bell className="mr-1.5 h-3.5 w-3.5" />
+                      Alerts
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
