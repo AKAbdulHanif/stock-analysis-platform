@@ -112,11 +112,12 @@ export type InsertSentimentHistory = typeof sentimentHistory.$inferInsert;
  */
 export const portfolioSnapshots = mysqlTable("portfolio_snapshots", {
   id: int("id").autoincrement().primaryKey(),
-  watchlistId: int("watchlistId").notNull(),
+  portfolioId: int("portfolioId").notNull(),
   date: timestamp("date").notNull(),
   totalValue: varchar("totalValue", { length: 20 }).notNull(), // Total portfolio value
-  dailyReturn: varchar("dailyReturn", { length: 20 }), // Daily return percentage
-  cumulativeReturn: varchar("cumulativeReturn", { length: 20 }), // Cumulative return since inception
+  totalReturn: varchar("totalReturn", { length: 20 }), // Total return amount
+  totalReturnPercent: varchar("totalReturnPercent", { length: 20 }), // Total return percentage
+  positionsJson: text("positionsJson"), // JSON snapshot of positions
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

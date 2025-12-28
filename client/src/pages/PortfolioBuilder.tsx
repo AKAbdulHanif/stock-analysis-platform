@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Plus, Trash2, TrendingUp, TrendingDown, PieChart, Activity, Save, FolderOpen, FileText } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, TrendingUp, TrendingDown, PieChart, Activity, Save, FolderOpen, FileText, LineChart } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -15,6 +15,7 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { CSS } from '@dnd-kit/utilities';
 import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { searchSecurities } from '../../../shared/stockUniverse';
+import { PerformanceChart } from '@/components/PerformanceChart';
 
 interface Position {
   id: string;
@@ -149,6 +150,7 @@ export default function PortfolioBuilder() {
   const [portfolioDescription, setPortfolioDescription] = useState('');
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [loadDialogOpen, setLoadDialogOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'positions' | 'performance'>('positions');
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -510,6 +512,30 @@ export default function PortfolioBuilder() {
           </div>
         </div>
 
+        {/* Tab Navigation */}
+        <div className="flex gap-2 mb-6">
+          <Button
+            variant={activeTab === 'positions' ? 'default' : 'outline'}
+            onClick={() => setActiveTab('positions')}
+            className={activeTab === 'positions' ? 'bg-blue-600' : 'border-slate-600 text-slate-300'}
+          >
+            <PieChart className="mr-2 h-4 w-4" />
+            Positions
+          </Button>
+          <Button
+            variant={activeTab === 'performance' ? 'default' : 'outline'}
+            onClick={() => setActiveTab('performance')}
+            className={activeTab === 'performance' ? 'bg-blue-600' : 'border-slate-600 text-slate-300'}
+            disabled={!currentPortfolioId}
+          >
+            <LineChart className="mr-2 h-4 w-4" />
+            Performance
+          </Button>
+        </div>
+
+        {/* Positions Tab */}
+        {activeTab === 'positions' && (
+          <>
         {/* Portfolio Metrics */}
         {metrics && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -685,6 +711,13 @@ export default function PortfolioBuilder() {
             </Card>
           </div>
         </div>
+          </>
+        )}
+
+        {/* Performance Tab */}
+        {activeTab === 'performance' && currentPortfolioId && (
+          <PerformanceChart portfolioId={currentPortfolioId} />
+        )}
       </div>
     </div>
   );

@@ -1017,3 +1017,30 @@
 - [x] Show active portfolio name in header
 - [ ] Add auto-save functionality (optional)
 - [x] Test save/load workflow end-to-end
+
+## Portfolio Performance History
+
+### Database Schema
+- [x] Create portfolio_snapshots table (portfolio_id, date, total_value, total_return, positions_json)
+- [x] Add indexes for efficient time-series queries
+- [x] Run database migration
+
+### API Endpoints
+- [x] Create GET /api/portfolios/:id/history endpoint (fetch snapshots)
+- [x] Create POST /api/portfolios/:id/snapshot endpoint (record daily snapshot)
+- [x] Create GET /api/portfolios/:id/performance endpoint (calculate metrics)
+- [x] Fetch S&P 500 historical data for benchmark comparison
+
+### UI Components
+- [x] Create PerformanceChart component with recharts line chart
+- [x] Add time period selector (1W, 1M, 3M, 6M, 1Y, All)
+- [x] Display portfolio value vs S&P 500 comparison
+- [x] Show cumulative returns percentage
+- [x] Add performance metrics cards (total return, CAGR, max drawdown)
+- [x] Integrate into Portfolio Builder page as new tab/section
+- [ ] Add auto-snapshot on portfolio save
+
+### Testing
+- [x] Test snapshot creation and retrieval
+- [x] Test chart rendering with historical data
+- [x] Verify benchmark comparison accuracy

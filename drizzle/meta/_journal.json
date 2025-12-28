@@ -36,6 +36,13 @@
       "when": 1766961995790,
       "tag": "0004_ancient_pandemic",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1766964418489,
+      "tag": "0005_glossy_proudstar",
+      "breakpoints": true
     }
   ]
 }
