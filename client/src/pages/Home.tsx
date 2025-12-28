@@ -85,6 +85,12 @@ export default function Home() {
               Sectors
             </Button>
           </Link>
+          <Link href="/sector-comparison">
+            <Button variant="outline" className="border-green-500/50 text-green-400 hover:bg-green-500/10">
+              <GitCompare className="mr-2 h-4 w-4" />
+              Compare Sectors
+            </Button>
+          </Link>
           <Link href="/compare">
             <Button variant="outline" className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10">
               <TrendingUp className="mr-2 h-4 w-4" />

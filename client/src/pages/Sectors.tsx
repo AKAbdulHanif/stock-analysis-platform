@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { SECTORS, getSecuritiesBySector } from '../../../shared/stockUniverse';
 import { QuickAddToWatchlist } from '@/components/QuickAddToWatchlist';
+import { useRealtimePrices } from '@/hooks/useRealtimePrices';
 
 const sectorIcons: Record<string, any> = {
   'Communication Services': Lightbulb,
@@ -72,6 +73,10 @@ export default function Sectors() {
 
   const sectorStocks = selectedSector ? getSecuritiesBySector(selectedSector) : [];
   const selectedPerformance = sectorPerformance.find(p => p.sector === selectedSector);
+  
+  // Subscribe to real-time prices for stocks in selected sector
+  const sectorTickers = sectorStocks.map(s => s.ticker);
+  const { prices, isConnected } = useRealtimePrices(sectorTickers, { enabled: !!selectedSector });
 
   const getMomentumColor = (momentum: string) => {
     switch (momentum) {
@@ -269,10 +274,30 @@ export default function Sectors() {
                     <div className="p-4">
                       <div className="flex items-start justify-between mb-2">
                         <Link href={`/stock/${stock.ticker}`} className="flex-1 cursor-pointer">
-                          <h3 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors">
-                            {stock.ticker}
-                          </h3>
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors">
+                              {stock.ticker}
+                            </h3>
+                            {isConnected && prices.get(stock.ticker) && (
+                              <Badge className="bg-green-500/10 text-green-500 text-xs px-1.5 py-0">
+                                Live
+                              </Badge>
+                            )}
+                          </div>
                           <p className="text-sm text-slate-400 line-clamp-2">{stock.name}</p>
+                          {prices.get(stock.ticker) && (
+                            <div className="flex items-center gap-2 mt-2">
+                              <span className="text-lg font-bold text-white">
+                                ${prices.get(stock.ticker)!.price.toFixed(2)}
+                              </span>
+                              <span className={`text-sm font-semibold ${
+                                prices.get(stock.ticker)!.changePercent >= 0 ? 'text-green-400' : 'text-red-400'
+                              }`}>
+                                {prices.get(stock.ticker)!.changePercent >= 0 ? '+' : ''}
+                                {prices.get(stock.ticker)!.changePercent.toFixed(2)}%
+                              </span>
+                            </div>
+                          )}
                         </Link>
                         <div className="flex items-center gap-1 flex-shrink-0 ml-2">
                           <QuickAddToWatchlist ticker={stock.ticker} name={stock.name} variant="icon" size="sm" />

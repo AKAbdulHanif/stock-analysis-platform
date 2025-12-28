@@ -17,7 +17,8 @@ import TaxLossHarvesting from './pages/TaxLossHarvesting';
 import OptionsAnalyzer from './pages/OptionsAnalyzer';
 import StockScreener from "./pages/StockScreener";
 import SectorRotation from "./pages/SectorRotation";
-import Sectors from "./pages/Sectors";
+import Sectors from './pages/Sectors';
+import SectorComparison from './pages/SectorComparison';
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -36,6 +37,7 @@ function Router() {
         <Route path="/screener" component={StockScreener} />
         <Route path="/sector-rotation" component={SectorRotation} />
         <Route path="/sectors" component={Sectors} />
+      <Route path="/sector-comparison" component={SectorComparison} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

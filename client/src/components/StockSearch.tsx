@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 import { cn } from '@/lib/utils';
 import { QuickAddToWatchlist } from './QuickAddToWatchlist';
 import { AdvancedSearchFilters, SearchFilters } from './AdvancedSearchFilters';
+import { useRealtimePrices } from '@/hooks/useRealtimePrices';
 
 interface Security {
   ticker: string;
@@ -20,6 +21,10 @@ export function StockSearch() {
   const searchRef = useRef<HTMLDivElement>(null);
   const [, setLocation] = useLocation();
   const [filters, setFilters] = useState<SearchFilters>({ marketCap: 'all', sectors: [] });
+  
+  // Subscribe to real-time prices for search results
+  const resultTickers = results.map(r => r.ticker);
+  const { prices, isConnected } = useRealtimePrices(resultTickers, { enabled: isOpen && results.length > 0 });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -147,9 +152,30 @@ export function StockSearch() {
                     <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
                       {security.sector.startsWith('ETF') ? 'ETF' : 'Stock'}
                     </span>
+                    {isConnected && prices.get(security.ticker) && (
+                      <span className="text-xs px-1.5 py-0.5 rounded bg-green-500/10 text-green-500">
+                        Live
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-muted-foreground truncate">{security.name}</p>
-                  <p className="text-xs text-muted-foreground/70 mt-0.5">{security.sector}</p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <p className="text-xs text-muted-foreground/70">{security.sector}</p>
+                    {prices.get(security.ticker) && (
+                      <>
+                        <span className="text-xs font-semibold text-foreground">
+                          ${prices.get(security.ticker)!.price.toFixed(2)}
+                        </span>
+                        <span className={cn(
+                          "text-xs font-medium",
+                          prices.get(security.ticker)!.changePercent >= 0 ? "text-green-500" : "text-red-500"
+                        )}>
+                          {prices.get(security.ticker)!.changePercent >= 0 ? '+' : ''}
+                          {prices.get(security.ticker)!.changePercent.toFixed(2)}%
+                        </span>
+                      </>
+                    )}
+                  </div>
                 </button>
                 <QuickAddToWatchlist ticker={security.ticker} name={security.name} variant="icon" size="sm" />
               </div>

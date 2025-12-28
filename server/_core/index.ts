@@ -30,6 +30,8 @@ import insiderTradingApiRouter from '../routes/insiderTradingApi';
 import cacheApiRouter from '../routes/cacheApi';
 import stockSearchRouter from '../routes/stockSearch';
 import sectorPerformanceRouter from '../routes/sectorPerformance';
+import sectorComparisonApiRouter from '../routes/sectorComparisonApi';
+import { realtimePriceService } from '../services/realtimePriceService';
 import { apiLimiter, stockDataLimiter } from './rateLimiter';
 import { securityHeaders, sanitizeInput, requestLogger } from './security';
 
@@ -118,6 +120,8 @@ async function startServer() {
   app.use("/api", stockSearchRouter);
   // Sector Performance API routes
   app.use("/api", sectorPerformanceRouter);
+  // Sector Comparison API routes
+  app.use("/api", sectorComparisonApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",
@@ -142,6 +146,9 @@ async function startServer() {
 
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+    
+    // Initialize WebSocket server for real-time price updates
+    realtimePriceService.initialize(server);
   });
 }
 

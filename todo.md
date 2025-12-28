@@ -939,3 +939,37 @@
 - [x] Add "Clear Filters" functionality
 - [ ] Persist filter state in URL params
 - [x] Add filter badges showing active filters
+
+## Real-Time Price Updates (WebSocket)
+- [x] Set up WebSocket server infrastructure
+- [x] Create price update service with Yahoo Finance streaming
+- [x] Implement WebSocket client hook (useRealtimePrices)
+- [x] Add real-time price display to search results
+- [x] Add real-time price display to sector stock cards
+- [x] Display daily change percentage with color coding
+- [x] Display market cap on stock cards
+- [x] Add connection status indicator
+- [x] Implement automatic reconnection logic
+- [x] Optimize WebSocket subscriptions (subscribe only to visible stocks)
+
+## Portfolio Tracking Integration
+- [ ] Create portfolio metrics API endpoint
+- [ ] Calculate returns, Sharpe ratio, beta for watchlist stocks
+- [ ] Add "View in Portfolio" link from watchlist
+- [ ] Create WatchlistPerformance component
+- [ ] Display aggregate metrics (total return, risk-adjusted return)
+- [ ] Add performance chart for watchlist stocks
+- [ ] Integrate with existing portfolio analytics dashboard
+- [ ] Add export watchlist to portfolio feature
+
+## Sector Comparison Tool
+- [ ] Create SectorComparison page component
+- [ ] Build sector comparison API endpoint
+- [ ] Implement multi-select sector picker
+- [ ] Create performance comparison chart (line chart)
+- [ ] Add correlation matrix heatmap
+- [ ] Display sector rotation signals
+- [ ] Add relative strength comparison
+- [ ] Create side-by-side metrics table
+- [ ] Add date range selector for historical comparison
+- [ ] Implement export comparison data feature
