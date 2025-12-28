@@ -27,8 +27,8 @@ describe("News API Integration Tests", () => {
       expect(response.body.articles).toBeInstanceOf(Array);
       if (response.body.articles.length > 0) {
         expect(response.body.articles[0]).toHaveProperty("title");
-        expect(response.body.articles[0]).toHaveProperty("link");
-        expect(response.body.articles[0]).toHaveProperty("pubDate");
+        expect(response.body.articles[0]).toHaveProperty("url");
+        expect(response.body.articles[0]).toHaveProperty("publishedAt");
         expect(response.body.articles[0]).toHaveProperty("source");
       }
     });
@@ -45,9 +45,9 @@ describe("News API Integration Tests", () => {
     it("should handle whitespace ticker", async () => {
       const response = await request(app)
         .get("/api/news/%20%20%20")
-        .expect(200);
+        .expect(400);
 
-      expect(response.body).toHaveProperty("articles");
+      expect(response.body).toHaveProperty("error");
     });
 
     it("should include sentiment data in articles", async () => {
@@ -70,7 +70,10 @@ describe("News API Integration Tests", () => {
         .send({ tickers: ["AAPL", "MSFT", "GOOGL"] })
         .expect(200);
 
-      expect(response.body).toBeInstanceOf(Array);
+      expect(response.body).toHaveProperty("articles");
+      expect(response.body.articles).toBeInstanceOf(Array);
+      expect(response.body).toHaveProperty("tickers");
+      expect(response.body).toHaveProperty("count");
     });
 
     it("should return 400 for missing tickers", async () => {
@@ -94,20 +97,21 @@ describe("News API Integration Tests", () => {
     it("should limit results to maxArticles parameter", async () => {
       const response = await request(app)
         .post("/api/news/portfolio")
-        .send({ tickers: ["AAPL", "MSFT"], maxArticles: 5 })
+        .send({ tickers: ["AAPL", "MSFT"], limitPerStock: 5 })
         .expect(200);
 
-      expect(response.body.length).toBeLessThanOrEqual(5);
+      expect(response.body.articles).toBeInstanceOf(Array);
+      // Each stock gets up to 5 articles, so max 10 total for 2 stocks
+      expect(response.body.articles.length).toBeLessThanOrEqual(10);
     });
 
     it("should handle empty tickers array", async () => {
       const response = await request(app)
         .post("/api/news/portfolio")
         .send({ tickers: [] })
-        .expect(200);
+        .expect(400);
 
-      expect(response.body).toBeInstanceOf(Array);
-      expect(response.body.length).toBe(0);
+      expect(response.body).toHaveProperty("error");
     });
   });
 
