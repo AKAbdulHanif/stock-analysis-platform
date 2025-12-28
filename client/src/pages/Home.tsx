@@ -91,6 +91,12 @@ export default function Home() {
               Compare Sectors
             </Button>
           </Link>
+          <Link href="/portfolio-builder">
+            <Button variant="outline" className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10">
+              <BarChart3 className="mr-2 h-4 w-4" />
+              Portfolio Builder
+            </Button>
+          </Link>
           <Link href="/compare">
             <Button variant="outline" className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10">
               <TrendingUp className="mr-2 h-4 w-4" />

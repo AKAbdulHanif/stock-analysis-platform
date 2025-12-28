@@ -19,6 +19,7 @@ import StockScreener from "./pages/StockScreener";
 import SectorRotation from "./pages/SectorRotation";
 import Sectors from './pages/Sectors';
 import SectorComparison from './pages/SectorComparison';
+import PortfolioBuilder from './pages/PortfolioBuilder';
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -38,6 +39,7 @@ function Router() {
         <Route path="/sector-rotation" component={SectorRotation} />
         <Route path="/sectors" component={Sectors} />
       <Route path="/sector-comparison" component={SectorComparison} />
+      <Route path="/portfolio-builder" component={PortfolioBuilder} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

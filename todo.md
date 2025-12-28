@@ -973,3 +973,27 @@
 - [ ] Create side-by-side metrics table
 - [ ] Add date range selector for historical comparison
 - [ ] Implement export comparison data feature
+
+## Historical Price Charts & Technical Indicators
+- [x] Create StockDetail page component (already exists)
+- [x] Add API endpoint for historical OHLCV data
+- [x] Implement candlestick chart using recharts (already exists)
+- [x] Add RSI indicator overlay (already exists)
+- [x] Add MACD indicator overlay (already exists)
+- [x] Add Bollinger Bands overlay (already exists)
+- [ ] Add time period selector (1D, 1W, 1M, 3M, 6M, 1Y, 5Y)
+- [ ] Add chart type toggle (candlestick, line, area)
+- [ ] Display stock info header (price, change, volume, market cap)
+- [ ] Add route for /stock/:ticker
+
+## Portfolio Builder
+- [x] Create PortfolioBuilder page component
+- [x] Implement drag-and-drop interface for adding stocks
+- [x] Create portfolio API endpoints (create, update, delete)
+- [x] Calculate real-time aggregate metrics (total return, Sharpe ratio)
+- [x] Calculate diversification score
+- [x] Display portfolio composition pie chart
+- [x] Add position sizing controls (dollar amount or percentage)
+- [ ] Show individual stock performance within portfolio
+- [ ] Add save/load portfolio functionality
+- [x] Add route for /portfolio-builder
