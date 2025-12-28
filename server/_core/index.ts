@@ -35,6 +35,7 @@ import stockDetailApiRouter from '../routes/stockDetailApi';
 import portfolioBuilderApiRouter from '../routes/portfolioBuilderApi';
 import portfolioApiRouter from '../routes/portfolioApi';
 import portfolioPerformanceApiRouter from '../routes/portfolioPerformanceApi';
+import portfolioExportApiRouter from '../routes/portfolioExportApi';
 import { realtimePriceService } from '../services/realtimePriceService';
 import { apiLimiter, stockDataLimiter } from './rateLimiter';
 import { securityHeaders, sanitizeInput, requestLogger } from './security';
@@ -134,6 +135,8 @@ async function startServer() {
   app.use("/api", portfolioApiRouter);
   // Portfolio Performance API routes
   app.use("/api", portfolioPerformanceApiRouter);
+  // Portfolio Export API routes
+  app.use("/api", portfolioExportApiRouter);
   // tRPC API
   app.use(
     "/api/trpc",

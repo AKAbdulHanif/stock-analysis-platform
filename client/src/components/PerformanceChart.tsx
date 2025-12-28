@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { TrendingUp, TrendingDown, FileDown, FileSpreadsheet } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface PerformanceChartProps {
   portfolioId: number;
@@ -27,6 +28,7 @@ export function PerformanceChart({ portfolioId }: PerformanceChartProps) {
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     loadPerformanceData();
@@ -82,6 +84,60 @@ export function PerformanceChart({ portfolioId }: PerformanceChartProps) {
       console.error('Error loading performance data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const exportToPDF = async () => {
+    try {
+      setExporting(true);
+      toast.info('Generating PDF report...');
+      
+      const response = await fetch(`/api/portfolios/${portfolioId}/export/pdf`);
+      if (!response.ok) throw new Error('Export failed');
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `portfolio_report_${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('PDF report downloaded successfully!');
+    } catch (error) {
+      console.error('Error exporting to PDF:', error);
+      toast.error('Failed to export PDF report');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const exportToExcel = async () => {
+    try {
+      setExporting(true);
+      toast.info('Generating Excel report...');
+      
+      const response = await fetch(`/api/portfolios/${portfolioId}/export/excel`);
+      if (!response.ok) throw new Error('Export failed');
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `portfolio_report_${new Date().toISOString().split('T')[0]}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('Excel report downloaded successfully!');
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      toast.error('Failed to export Excel report');
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -159,7 +215,33 @@ export function PerformanceChart({ portfolioId }: PerformanceChartProps) {
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-white">Portfolio Performance vs S&P 500</h3>
           
-          <div className="flex gap-2">
+          <div className="flex gap-4">
+            {/* Export Buttons */}
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={exportToPDF}
+                disabled={exporting || chartData.length === 0}
+                className="border-green-500/50 text-green-400 hover:bg-green-500/10"
+              >
+                <FileDown className="mr-2 h-4 w-4" />
+                Export PDF
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={exportToExcel}
+                disabled={exporting || chartData.length === 0}
+                className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10"
+              >
+                <FileSpreadsheet className="mr-2 h-4 w-4" />
+                Export Excel
+              </Button>
+            </div>
+            
+            {/* Period Selector */}
+            <div className="flex gap-2">
             {periods.map(p => (
               <Button
                 key={p.value}
@@ -171,6 +253,7 @@ export function PerformanceChart({ portfolioId }: PerformanceChartProps) {
                 {p.label}
               </Button>
             ))}
+            </div>
           </div>
         </div>
         

@@ -1044,3 +1044,39 @@
 - [x] Test snapshot creation and retrieval
 - [x] Test chart rendering with historical data
 - [x] Verify benchmark comparison accuracy
+
+## Portfolio Performance Export (PDF & Excel)
+
+### Backend API
+- [x] Install PDF generation libraries (pdfkit)
+- [x] Install Excel generation library (exceljs)
+- [x] Create GET /api/portfolios/:id/export/pdf endpoint
+- [x] Create GET /api/portfolios/:id/export/excel endpoint
+- [x] Generate PDF with charts, metrics, and positions table
+- [x] Generate Excel with multiple sheets (Summary, Positions, History)
+- [x] Add proper error handling for export failures
+
+### PDF Report Features
+- [x] Include portfolio name and date range
+- [x] Embed performance chart as image (table format)
+- [x] Display key metrics in formatted table
+- [x] List all positions with current values
+- [x] Add performance history data table
+- [x] Include S&P 500 benchmark comparison
+- [x] Add professional styling and branding
+
+### Excel Export Features
+- [x] Create Summary sheet with key metrics
+- [x] Create Positions sheet with detailed holdings
+- [x] Create History sheet with daily snapshots
+- [x] Format cells with proper number formatting
+- [x] Add conditional formatting for gains/losses
+- [x] Include formulas for calculations
+
+### UI Integration
+- [x] Add "Export PDF" button to Performance tab
+- [x] Add "Export Excel" button to Performance tab
+- [x] Show loading state during export
+- [x] Handle download trigger in browser
+- [x] Add success/error toast notifications
+- [x] Test export functionality end-to-end
