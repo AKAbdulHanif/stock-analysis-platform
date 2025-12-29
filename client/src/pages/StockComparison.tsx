@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { ArrowUpIcon, ArrowDownIcon, TrendingUpIcon, BarChart3Icon, XIcon } from "lucide-react";
 import { toast } from "sonner";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface StockQuote {
   price: number;
@@ -67,7 +68,7 @@ interface ComparisonResponse {
 
 const STOCK_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
 
-export default function StockComparison() {
+function StockComparisonPage() {
   const [tickers, setTickers] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [comparison, setComparison] = useState<ComparisonResponse | null>(null);
@@ -611,5 +612,13 @@ export default function StockComparison() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function StockComparison() {
+  return (
+    <ErrorBoundary>
+      <StockComparisonPage />
+    </ErrorBoundary>
   );
 }

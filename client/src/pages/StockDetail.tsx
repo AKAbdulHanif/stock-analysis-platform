@@ -13,6 +13,7 @@ import EconomicCalendar from "@/components/EconomicCalendar";
 import { InsiderTradingTracker } from "@/components/InsiderTradingTracker";
 import { toast } from "sonner";
 import StockNotFound from "@/components/StockNotFound";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface StockQuote {
   ticker: string;
@@ -33,7 +34,7 @@ interface ChartDataPoint {
   date: string;
 }
 
-export default function StockDetail() {
+function StockDetailPage() {
   const [, params] = useRoute("/stock/:ticker");
   const ticker = params?.ticker?.toUpperCase() || "";
   
@@ -364,5 +365,13 @@ export default function StockDetail() {
         </Tabs>
       </div>
     </div>
+  );
+}
+
+export default function StockDetail() {
+  return (
+    <ErrorBoundary>
+      <StockDetailPage />
+    </ErrorBoundary>
   );
 }
