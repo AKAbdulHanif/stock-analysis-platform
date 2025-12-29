@@ -1167,3 +1167,39 @@
 - [x] Create edge case testing report (EDGE_CASE_TESTING.md)
 - [x] Create production testing checklist (PRODUCTION_TESTING_CHECKLIST.md)
 - [ ] Create final checkpoint with robustness improvements
+
+
+## Accessibility Fixes Re-implementation (Current Priority)
+
+### Phase 1: Home.tsx Changes
+- [x] Add skip link to header (href="#main-content")
+- [x] Add CSS for skip link (.skip-link class with sr-only + focus styles)
+- [x] Add id="main-content" to main element
+- [x] Add nav landmark with aria-label="Main navigation"
+- [x] Add aria-hidden="true" to decorative icons (14 icons total)
+- [x] Verify Home.tsx changes don't break layout
+- [x] Test skip link visibility on Tab key press
+
+### Phase 2: StockSearch ARIA Pattern
+- [x] Add role="combobox" to search input
+- [x] Add aria-expanded state management
+- [x] Add aria-controls linking input to results
+- [x] Add aria-activedescendant for keyboard selection
+- [x] Add role="listbox" to search results dropdown
+- [x] Add role="option" to each search result
+- [x] Add visually hidden label for screen readers
+- [x] Add aria-hidden to search icon
+- [x] Verify StockSearch changes don't break functionality
+
+### Phase 3: Browser Testing
+- [x] Test homepage loads correctly (PASS)
+- [x] Test search autocomplete still works (PASS - AAPL dropdown appeared)
+- [ ] Test Tab key navigation (manual testing required)
+- [ ] Test skip link appears and works (manual testing required)
+- [x] Check browser console for errors (PASS - no React errors, only CSP warnings)
+- [ ] Test keyboard navigation through search results (manual testing required)
+
+### Phase 4: Checkpoint & Documentation
+- [ ] Create checkpoint with accessibility improvements
+- [ ] Document what was implemented
+- [ ] Report results to user

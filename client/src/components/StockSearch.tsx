@@ -115,9 +115,18 @@ export function StockSearch() {
     <div ref={searchRef} className="relative w-full max-w-2xl">
       <div className="flex gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <label htmlFor="stock-search-input" className="sr-only">
+            Search stocks and ETFs
+          </label>
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
           <Input
+            id="stock-search-input"
             type="text"
+            role="combobox"
+            aria-expanded={isOpen}
+            aria-controls="stock-search-results"
+            aria-activedescendant={selectedIndex >= 0 ? `stock-result-${selectedIndex}` : undefined}
+            aria-autocomplete="list"
             placeholder="Search stocks & ETFs..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -130,18 +139,26 @@ export function StockSearch() {
       </div>
 
       {isOpen && results.length > 0 && (
-        <div className="absolute top-full mt-2 w-full bg-card border border-border rounded-lg shadow-lg overflow-hidden z-50">
+        <div 
+          id="stock-search-results"
+          role="listbox"
+          aria-label="Stock search results"
+          className="absolute top-full mt-2 w-full bg-card border border-border rounded-lg shadow-lg overflow-hidden z-50"
+        >
           <div className="max-h-[400px] overflow-y-auto">
             {results.map((security, index) => (
               <div
                 key={security.ticker}
+                id={`stock-result-${index}`}
+                role="option"
+                aria-selected={selectedIndex === index}
                 className={cn(
                   "w-full px-4 py-3 flex items-start gap-3 hover:bg-accent/50 transition-colors",
                   selectedIndex === index && "bg-accent/50"
                 )}
               >
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-primary" />
+                  <TrendingUp className="h-5 w-5 text-primary" aria-hidden="true" />
                 </div>
                 <button
                   onClick={() => handleSelect(security.ticker)}

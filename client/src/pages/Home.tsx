@@ -68,6 +68,14 @@ export default function Home() {
 
    return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+      {/* Skip Link for Keyboard Navigation */}
+      <a 
+        href="#main-content" 
+        className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+      >
+        Skip to main content
+      </a>
+      
       <PriceUpdateIndicator />
       {/* Header */}
       <header className="border-b border-slate-700/50 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
@@ -84,36 +92,36 @@ export default function Home() {
               </div>
               
               {/* Navigation Buttons - Two Rows */}
-              <div className="flex flex-col gap-2">
+              <nav aria-label="Main navigation" className="flex flex-col gap-2">
                 {/* Row 1: Core Analysis & Portfolio Tools */}
                 <div className="flex items-center gap-2 flex-wrap justify-end">
                   <Link href="/sectors">
                     <Button variant="outline" size="sm" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
-                      <Grid3x3 className="mr-1.5 h-3.5 w-3.5" />
+                      <Grid3x3 className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Sectors
                     </Button>
                   </Link>
                   <Link href="/sector-comparison">
                     <Button variant="outline" size="sm" className="border-green-500/50 text-green-400 hover:bg-green-500/10">
-                      <GitCompare className="mr-1.5 h-3.5 w-3.5" />
+                      <GitCompare className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Compare Sectors
                     </Button>
                   </Link>
                   <Link href="/portfolio-builder">
                     <Button variant="outline" size="sm" className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10">
-                      <BarChart3 className="mr-1.5 h-3.5 w-3.5" />
+                      <BarChart3 className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Portfolio Builder
                     </Button>
                   </Link>
                   <Link href="/compare">
                     <Button variant="outline" size="sm" className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10">
-                      <TrendingUp className="mr-1.5 h-3.5 w-3.5" />
+                      <TrendingUp className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Compare Stocks
                     </Button>
                   </Link>
                   <Link href="/watchlists">
                     <Button variant="outline" size="sm" className="border-slate-600 text-white hover:bg-slate-700">
-                      <Star className="mr-1.5 h-3.5 w-3.5" />
+                      <Star className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Watchlists
                     </Button>
                   </Link>
@@ -123,55 +131,55 @@ export default function Home() {
                 <div className="flex items-center gap-2 flex-wrap justify-end">
                   <Link href="/backtest">
                     <Button variant="outline" size="sm" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
-                      <Activity className="mr-1.5 h-3.5 w-3.5" />
+                      <Activity className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Backtest Strategy
                     </Button>
                   </Link>
                   <Link href="/monte-carlo">
                     <Button variant="outline" size="sm" className="border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/10">
-                      <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                      <Sparkles className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Monte Carlo
                     </Button>
                   </Link>
                   <Link href="/tax-loss-harvesting">
                     <Button variant="outline" size="sm" className="border-red-500/50 text-red-400 hover:bg-red-500/10">
-                      <TrendingDown className="mr-1.5 h-3.5 w-3.5" />
+                      <TrendingDown className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Tax-Loss Harvesting
                     </Button>
                   </Link>
                   <Link href="/options">
                     <Button variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-700">
-                      <Calculator className="mr-1.5 h-3.5 w-3.5" />
+                      <Calculator className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Options Analyzer
                     </Button>
                   </Link>
                   <Link href="/screener">
                     <Button variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-700">
-                      <Filter className="mr-1.5 h-3.5 w-3.5" />
+                      <Filter className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Stock Screener
                     </Button>
                   </Link>
                   <Link href="/sector-rotation">
                     <Button variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-700">
-                      <Grid3x3 className="mr-1.5 h-3.5 w-3.5" />
+                      <Grid3x3 className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Sector Rotation
                     </Button>
                   </Link>
                   <Link href="/alerts">
                     <Button variant="outline" size="sm" className="border-slate-600 text-white hover:bg-slate-700">
-                      <Bell className="mr-1.5 h-3.5 w-3.5" />
+                      <Bell className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                       Alerts
                     </Button>
                   </Link>
                 </div>
-              </div>
+              </nav>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container py-12">
+      <main id="main-content" className="container py-12">
         {/* Executive Summary */}
         <Card className="mb-12 bg-gradient-to-r from-slate-800 to-slate-700 border-slate-600/50">
           <div className="p-8">
