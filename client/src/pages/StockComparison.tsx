@@ -78,20 +78,24 @@ export default function StockComparison() {
     const ticker = inputValue.trim().toUpperCase();
     if (!ticker) return;
 
+    // Validate ticker format (alphanumeric, 1-5 characters)
+    if (!/^[A-Z]{1,5}$/.test(ticker)) {
+      toast.error("Invalid ticker", {
+        description: "Ticker symbols must be 1-5 letters (e.g., AAPL, MSFT)"
+      });
+      return;
+    }
+
     if (tickers.includes(ticker)) {
-      toast({
-        title: "Duplicate ticker",
-        description: `${ticker} is already in the comparison list`,
-        variant: "destructive",
+      toast.error("Duplicate ticker", {
+        description: `${ticker} is already in the comparison list`
       });
       return;
     }
 
     if (tickers.length >= 5) {
-      toast({
-        title: "Maximum reached",
-        description: "You can compare up to 5 stocks at a time",
-        variant: "destructive",
+      toast.error("Maximum reached", {
+        description: "You can compare up to 5 stocks at a time"
       });
       return;
     }
@@ -107,10 +111,8 @@ export default function StockComparison() {
 
   const compareStocks = async () => {
     if (tickers.length < 2) {
-      toast({
-        title: "Not enough stocks",
-        description: "Please add at least 2 stocks to compare",
-        variant: "destructive",
+      toast.error("Not enough stocks", {
+        description: "Please add at least 2 stocks to compare"
       });
       return;
     }
@@ -131,10 +133,8 @@ export default function StockComparison() {
       setComparison(data);
     } catch (error) {
       console.error("Error comparing stocks:", error);
-      toast({
-        title: "Comparison failed",
-        description: "Failed to compare stocks. Please try again.",
-        variant: "destructive",
+      toast.error("Comparison failed", {
+        description: "Failed to compare stocks. Please try again."
       });
     } finally {
       setLoading(false);

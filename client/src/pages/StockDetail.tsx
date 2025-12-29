@@ -12,6 +12,7 @@ import CandlestickChart from "@/components/CandlestickChart";
 import EconomicCalendar from "@/components/EconomicCalendar";
 import { InsiderTradingTracker } from "@/components/InsiderTradingTracker";
 import { toast } from "sonner";
+import StockNotFound from "@/components/StockNotFound";
 
 interface StockQuote {
   ticker: string;
@@ -103,13 +104,7 @@ export default function StockDetail() {
   }
 
   if (!quote) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-white text-center py-20">Stock not found</div>
-        </div>
-      </div>
-    );
+    return <StockNotFound ticker={ticker} />;
   }
 
   const isPositive = quote.change >= 0;
